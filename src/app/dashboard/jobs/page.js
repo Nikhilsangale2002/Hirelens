@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import DashboardLayout from '../../components/DashboardLayout';
 import { 
   Plus, 
   Search, 
@@ -97,7 +96,6 @@ export default function JobsPage() {
   });
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -170,7 +168,7 @@ export default function JobsPage() {
                     <span>•</span>
                     <span>{job.type}</span>
                     <span>•</span>
-                    <span>Created {new Date(job.createdAt).toLocaleDateString()}</span>
+                    <span>Created {job.createdAt}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
@@ -280,6 +278,5 @@ export default function JobsPage() {
           </div>
         )}
       </div>
-    </DashboardLayout>
   );
 }

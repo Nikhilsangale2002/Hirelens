@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import DashboardLayout from '../../components/DashboardLayout';
 import { Search, Filter, Star, Download, Mail, Phone, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -64,7 +63,6 @@ export default function CandidatesPage() {
   };
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">All Candidates</h1>
@@ -161,6 +159,6 @@ export default function CandidatesPage() {
           ))}
         </div>
       </div>
-    </DashboardLayout>
+
   );
 }

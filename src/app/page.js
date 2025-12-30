@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Sparkles, Zap, Target, TrendingUp, Shield, Clock, Users, CheckCircle, Menu, X, Brain, Layers, LineChart } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Target, TrendingUp, Shield, Clock, Users, CheckCircle, Menu, X, Brain, Layers, LineChart, Linkedin, Github } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -126,7 +126,7 @@ export default function Home() {
       {/* Navigation */}
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrollY > 50 ? 'glass-panel shadow-2xl' : 'bg-transparent'
+          scrollY > 50 ? 'bg-[#0A0E27]/95 backdrop-blur-lg shadow-2xl border-b border-white/10' : 'bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-5">
@@ -144,9 +144,9 @@ export default function Home() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">Features</a>
-              <a href="#pricing" className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">Pricing</a>
-              <a href="#about" className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">About</a>
+              <button onClick={() => router.push('/features')} className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">Features</button>
+              <button onClick={() => router.push('/pricing')} className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">Pricing</button>
+              <button onClick={() => router.push('/about')} className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">About</button>
               <button onClick={() => router.push('/signin')} className="px-6 py-2 text-gray-300 hover:text-white transition-colors font-medium">
                 Sign In
               </button>
@@ -167,9 +167,9 @@ export default function Home() {
           {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden mt-6 pb-4 space-y-4 animate-fadeIn border-t border-white/10 pt-4">
-              <a href="#features" className="block text-gray-300 hover:text-[#FF6B35] font-medium">Features</a>
-              <a href="#pricing" className="block text-gray-300 hover:text-[#FF6B35] font-medium">Pricing</a>
-              <a href="#about" className="block text-gray-300 hover:text-[#FF6B35] font-medium">About</a>
+              <button onClick={() => router.push('/features')} className="block text-left text-gray-300 hover:text-[#FF6B35] font-medium">Features</button>
+              <button onClick={() => router.push('/pricing')} className="block text-left text-gray-300 hover:text-[#FF6B35] font-medium">Pricing</button>
+              <button onClick={() => router.push('/about')} className="block text-left text-gray-300 hover:text-[#FF6B35] font-medium">About</button>
               <button onClick={() => router.push('/signin')} className="block w-full px-6 py-2 text-gray-300 border border-gray-600 rounded-lg font-medium">
                 Sign In
               </button>
@@ -458,8 +458,11 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-white" />
+                <div className="relative w-8 h-8">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg animate-pulse-glow"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg flex items-center justify-center">
+                    <Brain className="w-5 h-5 text-white" />
+                  </div>
                 </div>
                 <span className="text-xl font-bold">HireLens</span>
               </div>
@@ -471,39 +474,45 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Integrations</a></li>
+                <li><button onClick={() => router.push('/features')} className="hover:text-[#FF6B35] transition-colors">Features</button></li>
+                <li><button onClick={() => router.push('/pricing')} className="hover:text-[#FF6B35] transition-colors">Pricing</button></li>
+                <li><button onClick={() => router.push('/api-docs')} className="hover:text-[#FF6B35] transition-colors">API</button></li>
+                <li><button onClick={() => router.push('/integrations')} className="hover:text-[#FF6B35] transition-colors">Integrations</button></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Contact</a></li>
+                <li><button onClick={() => router.push('/about')} className="hover:text-[#FF6B35] transition-colors">About</button></li>
+                <li><button onClick={() => router.push('/blog')} className="hover:text-[#FF6B35] transition-colors">Blog</button></li>
+                <li><button onClick={() => router.push('/careers')} className="hover:text-[#FF6B35] transition-colors">Careers</button></li>
+                <li><button onClick={() => router.push('/contact')} className="hover:text-[#FF6B35] transition-colors">Contact</button></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-[#FF6B35] transition-colors">Security</a></li>
+                <li><button onClick={() => router.push('/privacy')} className="hover:text-[#FF6B35] transition-colors">Privacy</button></li>
+                <li><button onClick={() => router.push('/terms')} className="hover:text-[#FF6B35] transition-colors">Terms</button></li>
+                <li><button onClick={() => router.push('/security')} className="hover:text-[#FF6B35] transition-colors">Security</button></li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
             <p>© 2024 HireLens AI. All rights reserved.</p>
-            <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-[#FF6B35] transition-colors">Twitter</a>
-              <a href="#" className="hover:text-[#FF6B35] transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-[#FF6B35] transition-colors">GitHub</a>
+            <div className="flex items-center space-x-4 mt-4 md:mt-0">
+              <a href="#" className="p-2 hover:bg-[#FF6B35]/10 hover:text-[#FF6B35] rounded-lg transition-colors">
+                <X className="w-5 h-5" />
+              </a>
+              <a href="#" className="p-2 hover:bg-[#FF6B35]/10 hover:text-[#FF6B35] rounded-lg transition-colors">
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="#" className="p-2 hover:bg-[#FF6B35]/10 hover:text-[#FF6B35] rounded-lg transition-colors">
+                <Github className="w-5 h-5" />
+              </a>
             </div>
           </div>
         </div>

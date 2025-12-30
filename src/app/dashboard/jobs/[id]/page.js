@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import DashboardLayout from '../../../components/DashboardLayout';
 import { 
   ArrowLeft, 
   Upload, 
@@ -114,7 +113,6 @@ export default function JobDetail({ params }) {
     .sort((a, b) => b.score - a.score);
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between">
@@ -461,6 +459,5 @@ export default function JobDetail({ params }) {
           </div>
         )}
       </div>
-    </DashboardLayout>
   );
 }

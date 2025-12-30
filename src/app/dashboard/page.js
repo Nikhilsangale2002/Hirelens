@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import DashboardLayout from '../components/DashboardLayout';
 import { 
   TrendingUp, 
   Briefcase, 
@@ -79,7 +78,6 @@ export default function Dashboard() {
   ];
 
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -247,6 +245,5 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
   );
 }

@@ -79,7 +79,7 @@ export default function DashboardLayout({ children }) {
               </button>
 
               {showUserMenu && (
-                <div className="absolute top-full right-0 mt-2 w-56 glass-panel rounded-xl overflow-hidden shadow-2xl">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-[#0F1433] rounded-xl overflow-hidden shadow-2xl border border-white/10">
                   <div className="p-4 border-b border-white/10">
                     <div className="text-sm font-medium">hr@company.com</div>
                     <div className="text-xs text-gray-400 mt-1">Pro Plan - 7/10 jobs used</div>

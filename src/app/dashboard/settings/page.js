@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import DashboardLayout from '../../components/DashboardLayout';
 import { 
   User, 
   Mail, 
@@ -49,7 +48,6 @@ export default function SettingsPage() {
   ];
 
   return (
-    <DashboardLayout>
       <div className="max-w-5xl space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">Settings</h1>
@@ -288,6 +286,5 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
   );
 }
