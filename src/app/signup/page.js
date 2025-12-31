@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Mail, Lock, User, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { authApi } from '@/lib/api';
 
 export default function SignUp() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,12 +68,38 @@ export default function SignUp() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('Form submitted:', formData);
-      // Handle signup logic here
-      alert('Account created successfully!');
+      setIsLoading(true);
+      setErrors({});
+
+      try {
+        await authApi.signup(
+          formData.name,
+          formData.email,
+          formData.password
+        );
+
+        // Redirect to signin page
+        router.push('/signin');
+
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Signup error:', error);
+        }
+        
+        // Handle specific error cases
+        if (error.status === 409) {
+          setErrors({ email: 'This email is already registered' });
+        } else if (error.status === 400) {
+          setErrors({ general: error.message || 'Please check your input and try again' });
+        } else {
+          setErrors({ general: 'An error occurred during signup. Please try again.' });
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -105,6 +133,13 @@ export default function SignUp() {
 
         {/* Sign Up Form */}
         <div className="glass-panel rounded-2xl p-8">
+          {/* General Error Message */}
+          {errors.general && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
+              <p className="text-red-400 text-sm">{errors.general}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Field */}
             <div>
@@ -219,10 +254,23 @@ export default function SignUp() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="group w-full px-8 py-4 bg-[#FF6B35] text-white rounded-lg font-semibold hover:bg-[#F77F00] transition-all hover:shadow-xl hover:shadow-[#FF6B35]/50 flex items-center justify-center space-x-2"
+              disabled={isLoading}
+              className="group w-full px-8 py-4 bg-[#FF6B35] text-white rounded-lg font-semibold hover:bg-[#F77F00] transition-all hover:shadow-xl hover:shadow-[#FF6B35]/50 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span>Create Account</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span>Creating Account...</span>
+                </>
+              ) : (
+                <>
+                  <span>Create Account</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </form>
 

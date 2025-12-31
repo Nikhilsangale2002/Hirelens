@@ -13,6 +13,8 @@ export default function Contact() {
     subject: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,10 +24,54 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    setSubmitStatus({ type: '', message: '' });
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Thank you for contacting us! We will get back to you soon.'
+        });
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          subject: '',
+          message: ''
+        });
+        
+        // Hide success message after 2 seconds
+        setTimeout(() => {
+          setSubmitStatus({ type: '', message: '' });
+        }, 2000);
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: data.error || 'Failed to send message. Please try again.'
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Network error. Please check your connection and try again.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactMethods = [
@@ -39,8 +85,8 @@ export default function Contact() {
     {
       icon: <Phone className="w-8 h-8" />,
       title: "Call Us",
-      info: "+1 (555) 123-4567",
-      description: "Mon-Fri, 9am-6pm PST",
+      info: "+91 9075910683",
+      description: "Mon-Fri, 9am-6pm IST",
       color: "#004E89"
     },
     {
@@ -134,6 +180,18 @@ export default function Contact() {
             {/* Contact Form */}
             <div className="glass-panel p-8 rounded-2xl">
               <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
+              
+              {/* Status Messages */}
+              {submitStatus.message && (
+                <div className={`mb-6 p-4 rounded-lg border ${
+                  submitStatus.type === 'success' 
+                    ? 'bg-green-500/10 border-green-500/50 text-green-400' 
+                    : 'bg-red-500/10 border-red-500/50 text-red-400'
+                }`}>
+                  {submitStatus.message}
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -216,10 +274,11 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-[#FF6B35] text-white rounded-lg hover:bg-[#F77F00] transition-all font-semibold flex items-center justify-center space-x-2"
+                  disabled={isSubmitting}
+                  className="w-full px-6 py-3 bg-[#FF6B35] text-white rounded-lg hover:bg-[#F77F00] transition-all font-semibold flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span>Send Message</span>
-                  <Send className="w-4 h-4" />
+                  <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                  {!isSubmitting && <Send className="w-4 h-4" />}
                 </button>
               </form>
             </div>

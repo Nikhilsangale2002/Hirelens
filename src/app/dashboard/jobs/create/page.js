@@ -10,9 +10,12 @@ import {
   Save
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { jobsApi } from '@/lib/api';
 
 export default function CreateJob() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     department: '',
@@ -28,6 +31,194 @@ export default function CreateJob() {
   const [skillInput, setSkillInput] = useState('');
   const [niceToHaveInput, setNiceToHaveInput] = useState('');
   const [jdFile, setJdFile] = useState(null);
+
+  // Dropdown options
+  const jobTitles = [
+    'Software Engineer',
+    'Senior Software Engineer',
+    'Staff Software Engineer',
+    'Principal Software Engineer',
+    'Frontend Developer',
+    'Backend Developer',
+    'Full Stack Developer',
+    'DevOps Engineer',
+    'Data Scientist',
+    'Data Analyst',
+    'Machine Learning Engineer',
+    'AI Engineer',
+    'Product Manager',
+    'Senior Product Manager',
+    'Product Designer',
+    'UI/UX Designer',
+    'Graphic Designer',
+    'Business Analyst',
+    'QA Engineer',
+    'Test Automation Engineer',
+    'Engineering Manager',
+    'Technical Lead',
+    'Architect',
+    'Solutions Architect',
+    'Mobile Developer',
+    'Android Developer',
+    'iOS Developer',
+    'Cloud Engineer',
+    'Security Engineer',
+    'Database Administrator',
+    'System Administrator',
+    'Marketing Manager',
+    'Sales Manager',
+    'HR Manager',
+    'Financial Analyst',
+    'Operations Manager',
+    'Customer Success Manager',
+    'Content Writer',
+    'Technical Writer',
+    'Intern'
+  ];
+
+  const departments = [
+    'Engineering',
+    'Product',
+    'Design',
+    'Data Science',
+    'DevOps',
+    'Quality Assurance',
+    'Marketing',
+    'Sales',
+    'Human Resources',
+    'Finance',
+    'Operations',
+    'Customer Support',
+    'Business Development',
+    'Research & Development',
+    'IT & Infrastructure',
+    'Security',
+    'Legal',
+    'Administration',
+    'Content & Creative'
+  ];
+
+  const locations = [
+    'Remote',
+    'Hybrid',
+    'Bangalore',
+    'Mumbai',
+    'Delhi',
+    'Pune',
+    'Hyderabad',
+    'Chennai',
+    'Kolkata',
+    'Ahmedabad',
+    'Gurgaon',
+    'Noida',
+    'Chandigarh',
+    'Jaipur',
+    'Kochi',
+    'Indore',
+    'Bhopal',
+    'Lucknow',
+    'Surat',
+    'Nagpur',
+    'Vadodara',
+    'Coimbatore',
+    'Visakhapatnam',
+    'Remote (India)',
+    'Remote (Global)'
+  ];
+
+  const experienceLevels = [
+    'Fresher (0-1 year)',
+    '1-2 years',
+    '2-3 years',
+    '3-5 years',
+    '5-7 years',
+    '7-10 years',
+    '10+ years',
+    '15+ years'
+  ];
+
+  const educationLevels = [
+    'High School',
+    '12th Pass',
+    'Diploma',
+    'Bachelor\'s Degree',
+    'B.Tech/B.E.',
+    'BCA',
+    'B.Sc',
+    'B.Com',
+    'BA',
+    'Master\'s Degree',
+    'M.Tech/M.E.',
+    'MCA',
+    'M.Sc',
+    'MBA',
+    'MA',
+    'PhD',
+    'Any Graduate',
+    'Any Post Graduate'
+  ];
+
+  const commonSkills = [
+    'JavaScript',
+    'Python',
+    'Java',
+    'C++',
+    'React',
+    'Angular',
+    'Vue.js',
+    'Node.js',
+    'Django',
+    'Flask',
+    'Spring Boot',
+    'SQL',
+    'MongoDB',
+    'PostgreSQL',
+    'MySQL',
+    'AWS',
+    'Azure',
+    'GCP',
+    'Docker',
+    'Kubernetes',
+    'Git',
+    'CI/CD',
+    'REST API',
+    'GraphQL',
+    'Machine Learning',
+    'Data Analysis',
+    'Excel',
+    'Power BI',
+    'Tableau',
+    'Figma',
+    'Adobe XD',
+    'Photoshop',
+    'UI/UX Design',
+    'Agile',
+    'Scrum',
+    'Project Management',
+    'Communication',
+    'Leadership',
+    'Problem Solving',
+    'Team Collaboration'
+  ];
+
+  const salaryRanges = [
+    '₹3-5 LPA',
+    '₹5-7 LPA',
+    '₹7-10 LPA',
+    '₹10-15 LPA',
+    '₹15-20 LPA',
+    '₹20-25 LPA',
+    '₹25-30 LPA',
+    '₹30-40 LPA',
+    '₹40-50 LPA',
+    '₹50+ LPA',
+    '$50k-$70k',
+    '$70k-$90k',
+    '$90k-$120k',
+    '$120k-$150k',
+    '$150k-$200k',
+    '$200k+'
+  ];
 
   const handleChange = (e) => {
     setFormData({
@@ -78,11 +269,36 @@ export default function CreateJob() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Job created:', formData);
-    // TODO: API call to create job
-    router.push('/dashboard/jobs');
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const jobData = {
+        title: formData.title,
+        department: formData.department,
+        location: formData.location,
+        job_type: formData.type,
+        experience_required: formData.experience,
+        description: formData.description,
+        skills_required: formData.requiredSkills,
+        education: formData.education,
+        salary_range: formData.salary
+      };
+
+      await jobsApi.createJob(jobData);
+      
+      // Redirect to jobs page on success
+      router.push('/dashboard/jobs');
+    } catch (err) {
+      setError(err.message || 'Failed to create job');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Create job error:', err);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -128,47 +344,63 @@ export default function CreateJob() {
 
         {/* Job Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Error Message */}
+          {error && (
+            <div className="glass-panel rounded-2xl p-4 bg-red-500/10 border border-red-500/50">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
           {/* Basic Information */}
           <div className="glass-panel rounded-2xl p-6">
             <h3 className="font-semibold mb-6">Basic Information</h3>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium mb-2">Job Title *</label>
-                <input
-                  type="text"
+                <select
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="e.g. Senior Full Stack Developer"
                   required
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
-                />
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+                >
+                  <option value="">Select Job Title</option>
+                  {jobTitles.map((title, index) => (
+                    <option key={index} value={title}>{title}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">Department *</label>
-                <input
-                  type="text"
+                <select
                   name="department"
                   value={formData.department}
                   onChange={handleChange}
-                  placeholder="e.g. Engineering"
                   required
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
-                />
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((dept, index) => (
+                    <option key={index} value={dept}>{dept}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">Location *</label>
-                <input
-                  type="text"
+                <select
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
-                  placeholder="e.g. Remote, Bangalore"
                   required
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
-                />
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+                >
+                  <option value="">Select Location</option>
+                  {locations.map((loc, index) => (
+                    <option key={index} value={loc}>{loc}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -177,7 +409,7 @@ export default function CreateJob() {
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
                 >
                   <option value="Full-time">Full-time</option>
                   <option value="Part-time">Part-time</option>
@@ -188,26 +420,32 @@ export default function CreateJob() {
 
               <div>
                 <label className="block text-sm font-medium mb-2">Experience Required</label>
-                <input
-                  type="text"
+                <select
                   name="experience"
                   value={formData.experience}
                   onChange={handleChange}
-                  placeholder="e.g. 3-5 years"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
-                />
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+                >
+                  <option value="">Select Experience Level</option>
+                  {experienceLevels.map((exp, index) => (
+                    <option key={index} value={exp}>{exp}</option>
+                  ))}
+                </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-2">Education</label>
-                <input
-                  type="text"
+                <select
                   name="education"
                   value={formData.education}
                   onChange={handleChange}
-                  placeholder="e.g. Bachelor's in Computer Science"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
-                />
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+                >
+                  <option value="">Select Education Level</option>
+                  {educationLevels.map((edu, index) => (
+                    <option key={index} value={edu}>{edu}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -229,12 +467,22 @@ export default function CreateJob() {
           <div className="glass-panel rounded-2xl p-6">
             <h3 className="font-semibold mb-4">Required Skills *</h3>
             <div className="flex gap-2 mb-4">
+              <select
+                value={skillInput}
+                onChange={(e) => setSkillInput(e.target.value)}
+                className="w-48 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+              >
+                <option value="">Select Skill</option>
+                {commonSkills.map((skill, index) => (
+                  <option key={index} value={skill}>{skill}</option>
+                ))}
+              </select>
               <input
                 type="text"
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
-                placeholder="Add a skill (e.g. React, Python)"
+                placeholder="Or type skill manually (e.g. React, Python)"
                 className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
               />
               <button
@@ -268,12 +516,22 @@ export default function CreateJob() {
           <div className="glass-panel rounded-2xl p-6">
             <h3 className="font-semibold mb-4">Nice to Have Skills</h3>
             <div className="flex gap-2 mb-4">
+              <select
+                value={niceToHaveInput}
+                onChange={(e) => setNiceToHaveInput(e.target.value)}
+                className="w-48 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+              >
+                <option value="">Select Skill</option>
+                {commonSkills.map((skill, index) => (
+                  <option key={index} value={skill}>{skill}</option>
+                ))}
+              </select>
               <input
                 type="text"
                 value={niceToHaveInput}
                 onChange={(e) => setNiceToHaveInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addNiceToHave())}
-                placeholder="Add optional skills"
+                placeholder="Or type skill manually"
                 className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
               />
               <button
@@ -306,14 +564,27 @@ export default function CreateJob() {
           {/* Salary Range */}
           <div className="glass-panel rounded-2xl p-6">
             <h3 className="font-semibold mb-4">Salary Range (Optional)</h3>
-            <input
-              type="text"
-              name="salary"
-              value={formData.salary}
-              onChange={handleChange}
-              placeholder="e.g. ₹10-15 LPA"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
-            />
+            <div className="flex gap-4">
+              <select
+                name="salary"
+                value={formData.salary}
+                onChange={handleChange}
+                className="w-64 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-white [&>option]:text-black"
+              >
+                <option value="">Select Range</option>
+                {salaryRanges.map((range, index) => (
+                  <option key={index} value={range}>{range}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                name="salary"
+                value={formData.salary}
+                onChange={handleChange}
+                placeholder="Or type manually (e.g. ₹10-15 LPA)"
+                className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
+              />
+            </div>
           </div>
 
           {/* Action Buttons */}
@@ -327,10 +598,11 @@ export default function CreateJob() {
             </button>
             <button
               type="submit"
-              className="flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all shadow-lg shadow-[#FF6B35]/20"
+              disabled={isLoading}
+              className="flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all shadow-lg shadow-[#FF6B35]/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-5 h-5" />
-              <span>Create Job</span>
+              <span>{isLoading ? 'Creating...' : 'Create Job'}</span>
             </button>
           </div>
         </form>
