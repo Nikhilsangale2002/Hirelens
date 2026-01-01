@@ -222,19 +222,11 @@ export default function CandidateDetailPage() {
 
   const handleDownloadResume = async () => {
     try {
-      const blob = await candidatesApi.downloadResume(candidateId);
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${candidate.candidate_name}_resume.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      setToast({ show: true, message: 'Resume downloaded successfully!', type: 'success' });
+      await candidatesApi.downloadResume(candidateId);
+      setToast({ show: true, message: 'Resume opened in new tab!', type: 'success' });
       setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
     } catch (err) {
-      setToast({ show: true, message: err.message || 'Failed to download resume', type: 'error' });
+      setToast({ show: true, message: err.message || 'Failed to open resume', type: 'error' });
       setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
     }
   };

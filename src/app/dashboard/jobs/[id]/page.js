@@ -133,10 +133,10 @@ export default function JobDetail() {
 
   const handleDownloadResume = async (candidateId, candidateName) => {
     try {
-      await candidatesApi.downloadResume(candidateId, candidateName);
-      showToast('Resume downloaded successfully');
+      await candidatesApi.downloadResume(candidateId);
+      showToast('Resume opened in new tab');
     } catch (err) {
-      showToast(err.message || 'Failed to download resume', 'error');
+      showToast(err.message || 'Failed to open resume', 'error');
     }
   };
 

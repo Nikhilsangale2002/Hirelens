@@ -677,8 +677,15 @@ export const candidatesApi = {
       throw new ApiError(data.error || 'Failed to download resume', response.status, data);
     }
     
-    // Return blob for caller to handle
-    return await response.blob();
+    // Get blob and open in new tab instead of downloading
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    
+    // Clean up the URL after a delay
+    setTimeout(() => window.URL.revokeObjectURL(url), 100);
+    
+    return true;
   }
 };
 
