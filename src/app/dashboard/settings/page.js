@@ -342,29 +342,31 @@ export default function SettingsPage() {
   ];
 
   return (
-      <div className="max-w-5xl space-y-6">
+      <div className="max-w-5xl space-y-4 md:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Settings</h1>
-          <p className="text-gray-400">Manage your account settings and preferences</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Settings</h1>
+          <p className="text-sm md:text-base text-gray-600">Manage your account settings and preferences</p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-4 gap-4 md:gap-6">
           {/* Tabs */}
-          <div className="md:col-span-1 space-y-2">
+          <div className="md:col-span-1">
+            <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible gap-2 pb-2 md:pb-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
+                className={`flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 rounded-lg transition-all whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'bg-[#FF6B35] text-white'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    : 'text-gray-600 hover:bg-white/5 hover:text-black'
                 }`}
               >
-                {tab.icon}
-                <span className="font-medium">{tab.label}</span>
+                <span className="hidden md:inline">{tab.icon}</span>
+                <span className="font-medium text-sm md:text-base">{tab.label}</span>
               </button>
             ))}
+            </div>
           </div>
 
           {/* Content */}
@@ -384,13 +386,13 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'profile' && (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="glass-panel rounded-2xl p-6">
-                  <h2 className="text-xl font-bold mb-6">Profile Information</h2>
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">Profile Information</h2>
                   
                   {/* Profile Image Upload */}
                   <div className="mb-6">
-                    <label className="block text-sm font-medium mb-4">Profile Image</label>
+                    <label className="block text-xs md:text-sm font-medium mb-4">Profile Image</label>
                     <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-8">
                       <div className="relative group">
                         <div className="w-40 h-40 rounded-full bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center overflow-hidden border-4 border-white/30 shadow-2xl ring-4 ring-white/10 transition-all group-hover:ring-white/20">
@@ -402,15 +404,15 @@ export default function SettingsPage() {
                               style={{ imageRendering: '-webkit-optimize-contrast', objectFit: 'cover' }}
                             />
                           ) : (
-                            <User className="w-20 h-20 text-gray-400" />
+                            <User className="w-20 h-20 text-gray-600" />
                           )}
                         </div>
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="absolute bottom-2 right-2 p-3 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-full hover:from-[#F77F00] hover:to-[#FF6B35] transition-all shadow-xl border-3 border-white/30 transform hover:scale-110"
+                          className="absolute bottom-1 right-1 md:bottom-2 md:right-2 p-2 md:p-3 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-full hover:from-[#F77F00] hover:to-[#FF6B35] transition-all shadow-xl border-3 border-white/30 transform hover:scale-110"
                         >
-                          <Camera className="w-6 h-6" />
+                          <Camera className="w-5 h-5 md:w-6 md:h-6" />
                         </button>
                       </div>
                       <div className="flex-1">
@@ -421,13 +423,13 @@ export default function SettingsPage() {
                           onChange={handleImageChange}
                           className="hidden"
                         />
-                        <div className="space-y-3">
+                        <div className="space-y-3 w-full sm:w-auto">
                           <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="px-6 py-3 bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border border-white/20 rounded-lg transition-all flex items-center space-x-2 font-medium shadow-lg"
+                            className="w-full sm:w-auto px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/10 border border-white/20 rounded-lg transition-all flex items-center justify-center space-x-2 font-medium shadow-lg text-sm md:text-base"
                           >
-                            <Upload className="w-5 h-5" />
+                            <Upload className="w-4 h-4 md:w-5 md:h-5" />
                             <span>Upload New Photo</span>
                           </button>
                           {profileImagePreview && (
@@ -452,14 +454,14 @@ export default function SettingsPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Full Name</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">Full Name</label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 bg-white/5 border ${
-                          errors.name ? 'border-red-500' : 'border-white/10'
+                            errors.name ? 'border-red-500' : 'border-gray-200'
                         } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                       />
                       {errors.name && (
@@ -468,14 +470,14 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">Email</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">Email</label>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         className={`w-full px-4 py-3 bg-white/5 border ${
-                          errors.email ? 'border-red-500' : 'border-white/10'
+                            errors.email ? 'border-red-500' : 'border-gray-200'
                         } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                       />
                       {errors.email && (
@@ -484,7 +486,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">Company</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">Company</label>
                       <input
                         type="text"
                         name="company"
@@ -495,7 +497,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">Phone</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">Phone</label>
                       <input
                         type="tel"
                         name="phone"
@@ -510,9 +512,9 @@ export default function SettingsPage() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="mt-6 flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-6 flex items-center justify-center space-x-2 px-4 md:px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm md:text-base"
                   >
-                    <Save className="w-5 h-5" />
+                    <Save className="w-4 h-4 md:w-5 md:h-5" />
                     <span>{isLoading ? 'Saving...' : 'Save Changes'}</span>
                   </button>
                 </div>
@@ -520,19 +522,19 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'plan' && (
-              <div className="space-y-6">
-                <div className="glass-panel rounded-2xl p-6">
-                  <h2 className="text-xl font-bold mb-4">Current Plan</h2>
+              <div className="space-y-4 md:space-y-6">
+                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold mb-4">Current Plan</h2>
                   {planData ? (
-                    <div className="p-6 bg-gradient-to-br from-[#FF6B35]/20 to-[#F77F00]/20 rounded-xl border border-[#FF6B35]/50">
-                      <div className="flex items-center justify-between mb-4">
+                    <div className="p-4 md:p-6 bg-gradient-to-br from-[#FF6B35]/20 to-[#F77F00]/20 rounded-xl border border-[#FF6B35]/50">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                         <div>
-                          <h3 className="text-2xl font-bold capitalize">{planData.name} Plan</h3>
-                          <p className="text-gray-400">₹{planData.price}/month</p>
+                          <h3 className="text-xl md:text-2xl font-bold capitalize">{planData.name} Plan</h3>
+                          <p className="text-sm md:text-base text-gray-400">₹{planData.price}/month</p>
                         </div>
-                        <div className="text-right">
-                          <div className="text-sm text-gray-400">Usage</div>
-                          <div className="font-semibold">Current Month</div>
+                        <div className="text-left sm:text-right">
+                          <div className="text-xs md:text-sm text-gray-400">Usage</div>
+                          <div className="text-sm md:text-base font-semibold">Current Month</div>
                         </div>
                       </div>
                       
@@ -573,12 +575,12 @@ export default function SettingsPage() {
                       </button>
                     </div>
                   ) : (
-                    <div className="text-center py-8 text-gray-400">Loading plan details...</div>
+                    <div className="text-center py-8 text-gray-600">Loading plan details...</div>
                   )}
                 </div>
 
-                <div className="glass-panel rounded-2xl p-6">
-                  <h2 className="text-xl font-bold mb-4">Billing History</h2>
+                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold mb-4">Billing History</h2>
                   <div className="space-y-3">
                     <div className="text-center py-8 text-gray-400">
                       No billing history available yet
@@ -589,15 +591,15 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'email' && (
-              <div className="space-y-6">
-                <div className="glass-panel rounded-2xl p-6">
-                  <h2 className="text-xl font-bold mb-2">Email Configuration</h2>
-                  <p className="text-gray-400 text-sm mb-6">Configure SMTP settings for sending interview invitations and status notifications</p>
+              <div className="space-y-4 md:space-y-6">
+                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold mb-2">Email Configuration</h2>
+                  <p className="text-gray-400 text-xs md:text-sm mb-4 md:mb-6">Configure SMTP settings for sending interview invitations and status notifications</p>
                   
                   <form onSubmit={handleSaveEmailConfig} className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">SMTP Server</label>
+                        <label className="block text-xs md:text-sm font-medium mb-2">SMTP Server</label>
                         <input
                           type="text"
                           name="smtp_server"
@@ -609,7 +611,7 @@ export default function SettingsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">SMTP Port</label>
+                        <label className="block text-xs md:text-sm font-medium mb-2">SMTP Port</label>
                         <input
                           type="number"
                           name="smtp_port"
@@ -622,7 +624,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">SMTP Username</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">SMTP Username</label>
                       <input
                         type="text"
                         name="smtp_username"
@@ -634,7 +636,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">SMTP Password</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">SMTP Password</label>
                       <div className="relative">
                         <input
                           type={showSmtpPassword ? 'text' : 'password'}
@@ -647,7 +649,7 @@ export default function SettingsPage() {
                         <button
                           type="button"
                           onClick={() => setShowSmtpPassword(!showSmtpPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
                         >
                           {showSmtpPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
@@ -655,9 +657,9 @@ export default function SettingsPage() {
                       <p className="text-xs text-gray-400 mt-1">For Gmail, use App Password (not your account password)</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">From Email</label>
+                        <label className="block text-xs md:text-sm font-medium mb-2">From Email</label>
                         <input
                           type="email"
                           name="from_email"
@@ -669,7 +671,7 @@ export default function SettingsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">From Name</label>
+                        <label className="block text-xs md:text-sm font-medium mb-2">From Name</label>
                         <input
                           type="text"
                           name="from_name"
@@ -684,21 +686,21 @@ export default function SettingsPage() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center justify-center space-x-2 px-4 md:px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm md:text-base"
                     >
-                      <Save className="w-5 h-5" />
+                      <Save className="w-4 h-4 md:w-5 md:h-5" />
                       <span>{isLoading ? 'Saving...' : 'Save Configuration'}</span>
                     </button>
                   </form>
                 </div>
 
-                <div className="glass-panel rounded-2xl p-6">
-                  <h2 className="text-xl font-bold mb-2">Test Email</h2>
-                  <p className="text-gray-400 text-sm mb-4">Send a test email to verify your SMTP configuration</p>
+                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                  <h2 className="text-lg md:text-xl font-bold mb-2">Test Email</h2>
+                  <p className="text-gray-400 text-xs md:text-sm mb-4">Send a test email to verify your SMTP configuration</p>
                   
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Recipient Email</label>
+                      <label className="block text-xs md:text-sm font-medium mb-2">Recipient Email</label>
                       <input
                         type="email"
                         value={testEmailAddress}
@@ -717,12 +719,12 @@ export default function SettingsPage() {
                       type="button"
                       onClick={handleTestEmail}
                       disabled={isLoading || !emailConfig.smtp_server || !testEmailAddress}
-                      className="flex items-center space-x-2 px-6 py-3 bg-[#06A77D] hover:bg-[#06A77D]/80 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center justify-center space-x-2 px-4 md:px-6 py-3 bg-[#06A77D] hover:bg-[#06A77D]/80 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm md:text-base"
                     >
                       {testEmailStatus === 'success' ? (
-                        <CheckCircle className="w-5 h-5" />
+                        <CheckCircle className="w-4 h-4 md:w-5 md:h-5" />
                       ) : (
-                        <Send className="w-5 h-5" />
+                        <Send className="w-4 h-4 md:w-5 md:h-5" />
                       )}
                       <span>{isLoading ? 'Sending...' : testEmailStatus === 'success' ? 'Email Sent!' : 'Send Test Email'}</span>
                     </button>
@@ -736,8 +738,8 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'notifications' && (
-              <div className="glass-panel rounded-2xl p-6">
-                <h2 className="text-xl font-bold mb-6">Notification Preferences</h2>
+              <div className="glass-panel rounded-2xl p-4 md:p-6">
+                <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">Notification Preferences</h2>
                 <div className="space-y-4">
                   {[
                     { 
@@ -761,10 +763,10 @@ export default function SettingsPage() {
                       description: 'Receive weekly recruitment summary' 
                     }
                   ].map((item) => (
-                    <div key={item.key} className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-                      <div>
-                        <div className="font-medium">{item.label}</div>
-                        <div className="text-sm text-gray-400">{item.description}</div>
+                    <div key={item.key} className="flex items-center justify-between p-3 md:p-4 bg-white/5 rounded-lg gap-3">
+                      <div className="flex-1">
+                        <div className="font-medium text-sm md:text-base">{item.label}</div>
+                        <div className="text-xs md:text-sm text-gray-400">{item.description}</div>
                       </div>
                       <input
                         type="checkbox"
@@ -779,11 +781,11 @@ export default function SettingsPage() {
             )}
 
             {activeTab === 'security' && (
-              <div className="glass-panel rounded-2xl p-6">
-                <h2 className="text-xl font-bold mb-6">Change Password</h2>
+              <div className="glass-panel rounded-2xl p-4 md:p-6">
+                <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">Change Password</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Current Password</label>
+                    <label className="block text-xs md:text-sm font-medium mb-2">Current Password</label>
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
@@ -797,7 +799,7 @@ export default function SettingsPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
                       >
                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
@@ -808,7 +810,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">New Password</label>
+                    <label className="block text-xs md:text-sm font-medium mb-2">New Password</label>
                     <input
                       type="password"
                       name="newPassword"
@@ -824,7 +826,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Confirm New Password</label>
+                    <label className="block text-xs md:text-sm font-medium mb-2">Confirm New Password</label>
                     <input
                       type="password"
                       name="confirmPassword"
@@ -842,9 +844,9 @@ export default function SettingsPage() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center space-x-2 px-4 md:px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto text-sm md:text-base"
                   >
-                    <Key className="w-5 h-5" />
+                    <Key className="w-4 h-4 md:w-5 md:h-5" />
                     <span>{isLoading ? 'Updating...' : 'Update Password'}</span>
                   </button>
                 </form>

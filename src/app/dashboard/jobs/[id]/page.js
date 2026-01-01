@@ -222,10 +222,10 @@ export default function JobDetail() {
   }
 
   return (
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div className="flex items-start space-x-3 md:space-x-4">
             <button
               onClick={() => router.push('/dashboard/jobs')}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors mt-1"
@@ -233,12 +233,12 @@ export default function JobDetail() {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-3xl font-bold mb-2">{job?.title}</h1>
-              <div className="flex items-center space-x-4 text-gray-400">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2">{job?.title}</h1>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs md:text-sm text-gray-400">
                 <span>{job?.department}</span>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <span>{job?.location}</span>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <span>{job?.job_type}</span>
               </div>
             </div>
@@ -246,7 +246,7 @@ export default function JobDetail() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <div className="glass-panel rounded-xl p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#004E8922', color: '#004E89' }}>
@@ -288,7 +288,7 @@ export default function JobDetail() {
         </div>
 
         {/* Filters */}
-        <div className="glass-panel rounded-2xl p-4 flex gap-4">
+        <div className="glass-panel rounded-2xl p-4 flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -483,11 +483,11 @@ export default function JobDetail() {
         {/* Candidate Detail Modal */}
         {selectedCandidate && (
           <div className="fixed inset-0 flex items-center justify-center z-50 p-6">
-            <div className="bg-[#0F1433] border border-white/10 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-              <div className="sticky top-0 bg-[#0F1433] p-6 border-b border-white/10 flex items-start justify-between z-10">
+            <div className="bg-white border border-gray-200 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+              <div className="sticky top-0 bg-white p-6 border-b border-gray-200 flex items-start justify-between z-10">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">{selectedCandidate.candidate_name}</h2>
-                  <div className="flex items-center space-x-4 text-sm text-gray-400">
+                  <h2 className="text-2xl font-bold mb-2 text-black">{selectedCandidate.candidate_name}</h2>
+                  <div className="flex items-center space-x-4 text-sm text-gray-600">
                     <span className="flex items-center space-x-1">
                       <Mail className="w-4 h-4" />
                       <span>{selectedCandidate.email}</span>
@@ -502,49 +502,49 @@ export default function JobDetail() {
                 </div>
                 <button
                   onClick={() => setSelectedCandidate(null)}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <XIcon className="w-5 h-5" />
+                  <XIcon className="w-5 h-5 text-gray-600" />
                 </button>
               </div>
 
               <div className="p-6 space-y-6">
                 {/* AI Score */}
-                <div className="text-center p-6 bg-white/5 rounded-xl">
+                <div className="text-center p-6 bg-gray-50 rounded-xl">
                   <div
                     className="text-6xl font-bold mb-2"
                     style={{ color: getScoreColor(selectedCandidate.ai_score || 0) }}
                   >
                     {Math.round(selectedCandidate.ai_score || 0)}
                   </div>
-                  <div className="text-gray-400">AI Match Score</div>
+                  <div className="text-gray-600">AI Match Score</div>
                 </div>
 
                 {/* Basic Info */}
                 <div className="grid md:grid-cols-2 gap-4">
                   {selectedCandidate.experience_years && (
-                    <div className="p-4 bg-white/5 rounded-xl">
+                    <div className="p-4 bg-gray-50 rounded-xl">
                       <div className="flex items-center space-x-2 mb-2">
-                        <Briefcase className="w-5 h-5 text-gray-400" />
-                        <span className="text-sm text-gray-400">Experience</span>
+                        <Briefcase className="w-5 h-5 text-gray-600" />
+                        <span className="text-sm text-gray-600">Experience</span>
                       </div>
-                      <div className="font-medium">{selectedCandidate.experience_years} years</div>
+                      <div className="font-medium text-black">{selectedCandidate.experience_years} years</div>
                     </div>
                   )}
                   {selectedCandidate.education_level && (
-                    <div className="p-4 bg-white/5 rounded-xl">
+                    <div className="p-4 bg-gray-50 rounded-xl">
                       <div className="flex items-center space-x-2 mb-2">
-                        <GraduationCap className="w-5 h-5 text-gray-400" />
-                        <span className="text-sm text-gray-400">Education</span>
+                        <GraduationCap className="w-5 h-5 text-gray-600" />
+                        <span className="text-sm text-gray-600">Education</span>
                       </div>
-                      <div className="font-medium">{selectedCandidate.education_level}</div>
+                      <div className="font-medium text-black">{selectedCandidate.education_level}</div>
                     </div>
                   )}
                 </div>
 
                 {/* Skills Analysis */}
                 <div>
-                  <h3 className="font-semibold mb-3">Skills Analysis</h3>
+                  <h3 className="font-semibold mb-3 text-black">Skills Analysis</h3>
                   <div className="space-y-3">
                     {(selectedCandidate.matched_skills || []).length > 0 && (
                       <div>
@@ -589,10 +589,10 @@ export default function JobDetail() {
                 {/* Interview History */}
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold">Interview History</h3>
+                    <h3 className="font-semibold text-black">Interview History</h3>
                     <button
                       onClick={() => setShowScheduleModal(true)}
-                      className="px-4 py-2 bg-[#004E89] hover:bg-[#004E89]/80 rounded-lg text-sm flex items-center space-x-2 transition-all"
+                      className="px-4 py-2 bg-[#004E89] hover:bg-[#004E89]/80 rounded-lg text-sm flex items-center space-x-2 transition-all text-white"
                     >
                       <Calendar className="w-4 h-4" />
                       <span>Schedule Interview</span>
@@ -600,15 +600,15 @@ export default function JobDetail() {
                   </div>
                   
                   {isLoadingInterviews ? (
-                    <div className="text-center py-4 text-gray-400">Loading interviews...</div>
+                    <div className="text-center py-4 text-gray-600">Loading interviews...</div>
                   ) : candidateInterviews.length > 0 ? (
                     <div className="space-y-2">
                       {candidateInterviews.map((interview) => (
-                        <div key={interview.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
+                        <div key={interview.id} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <div className="font-medium capitalize">{interview.interview_type} Interview</div>
-                              <div className="text-sm text-gray-400 mt-1">
+                              <div className="font-medium capitalize text-black">{interview.interview_type} Interview</div>
+                              <div className="text-sm text-gray-600 mt-1">
                                 {new Date(interview.scheduled_date).toLocaleString()}
                               </div>
                               <div className="text-xs text-gray-500 mt-1">
@@ -647,7 +647,7 @@ export default function JobDetail() {
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-6 text-gray-400 bg-white/5 rounded-lg border border-white/10">
+                    <div className="text-center py-6 text-gray-600 bg-gray-50 rounded-lg border border-gray-200">
                       No interviews scheduled yet
                     </div>
                   )}
@@ -689,28 +689,28 @@ export default function JobDetail() {
         {/* Schedule Interview Modal */}
         {showScheduleModal && selectedCandidate && (
           <div className="fixed inset-0 flex items-center justify-center z-50 p-6">
-            <div className="bg-[#0F1433] border border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-              <div className="sticky top-0 bg-[#0F1433] p-6 border-b border-white/10 flex items-start justify-between z-10">
+            <div className="bg-white border border-gray-200 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+              <div className="sticky top-0 bg-white p-6 border-b border-gray-200 flex items-start justify-between z-10">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Schedule Interview</h2>
-                  <p className="text-gray-400">{selectedCandidate.candidate_name}</p>
+                  <h2 className="text-2xl font-bold mb-2 text-black">Schedule Interview</h2>
+                  <p className="text-gray-600">{selectedCandidate.candidate_name}</p>
                 </div>
                 <button
                   onClick={() => setShowScheduleModal(false)}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <XIcon className="w-5 h-5" />
+                  <XIcon className="w-5 h-5 text-gray-600" />
                 </button>
               </div>
 
               <form onSubmit={handleScheduleInterview} className="p-6 space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Interview Type</label>
+                    <label className="block text-sm font-medium mb-2 text-black">Interview Type</label>
                     <select
                       value={interviewForm.interview_type}
                       onChange={(e) => setInterviewForm({...interviewForm, interview_type: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white [&>option]:text-black [&>option]:bg-white"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                       required
                     >
                       <option value="screening">Screening</option>
@@ -722,11 +722,11 @@ export default function JobDetail() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Interview Mode</label>
+                    <label className="block text-sm font-medium mb-2 text-black">Interview Mode</label>
                     <select
                       value={interviewForm.interview_mode}
                       onChange={(e) => setInterviewForm({...interviewForm, interview_mode: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white [&>option]:text-black [&>option]:bg-white"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                       required
                     >
                       <option value="video">Video Call</option>
@@ -737,23 +737,23 @@ export default function JobDetail() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Date & Time</label>
+                    <label className="block text-sm font-medium mb-2 text-black">Date & Time</label>
                     <input
                       type="datetime-local"
                       value={interviewForm.scheduled_date}
                       onChange={(e) => setInterviewForm({...interviewForm, scheduled_date: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Duration (minutes)</label>
+                    <label className="block text-sm font-medium mb-2 text-black">Duration (minutes)</label>
                     <input
                       type="number"
                       value={interviewForm.duration_minutes}
                       onChange={(e) => setInterviewForm({...interviewForm, duration_minutes: parseInt(e.target.value)})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                       min="15"
                       step="15"
                       required
@@ -762,46 +762,46 @@ export default function JobDetail() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Meeting Link (Google Meet, Zoom, etc.)</label>
+                  <label className="block text-sm font-medium mb-2 text-black">Meeting Link (Google Meet, Zoom, etc.)</label>
                   <input
                     type="url"
                     value={interviewForm.meeting_link}
                     onChange={(e) => setInterviewForm({...interviewForm, meeting_link: e.target.value})}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                     placeholder="https://meet.google.com/xyz-abc-def"
                   />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Interviewer Name</label>
+                    <label className="block text-sm font-medium mb-2 text-black">Interviewer Name</label>
                     <input
                       type="text"
                       value={interviewForm.interviewer_name}
                       onChange={(e) => setInterviewForm({...interviewForm, interviewer_name: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                       placeholder="John Doe"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Interviewer Email</label>
+                    <label className="block text-sm font-medium mb-2 text-black">Interviewer Email</label>
                     <input
                       type="email"
                       value={interviewForm.interviewer_email}
                       onChange={(e) => setInterviewForm({...interviewForm, interviewer_email: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                       placeholder="interviewer@company.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Notes (Optional)</label>
+                  <label className="block text-sm font-medium mb-2 text-black">Notes (Optional)</label>
                   <textarea
                     value={interviewForm.notes}
                     onChange={(e) => setInterviewForm({...interviewForm, notes: e.target.value})}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] text-white"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#FF6B35] text-black"
                     rows="3"
                     placeholder="Focus areas, preparation notes, etc."
                   />
@@ -810,14 +810,14 @@ export default function JobDetail() {
                 <div className="flex items-center space-x-3 pt-4">
                   <button
                     type="submit"
-                    className="flex-1 px-6 py-3 bg-[#06A77D] hover:bg-[#06A77D]/80 rounded-lg font-semibold transition-all"
+                    className="flex-1 px-6 py-3 bg-[#06A77D] hover:bg-[#06A77D]/80 rounded-lg font-semibold transition-all text-white"
                   >
                     Schedule & Send Invitation
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowScheduleModal(false)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-lg font-semibold transition-all"
+                    className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-semibold transition-all text-black"
                   >
                     Cancel
                   </button>

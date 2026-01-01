@@ -1,16 +1,68 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Brain, MapPin, Briefcase, Clock, ArrowRight, Users, Zap, Heart, TrendingUp, Home, DollarSign, Sun, BookOpen, Laptop, PartyPopper } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+// Memoized job card component
+const JobCard = React.memo(({ job, onClick }) => (
+  <div
+    onClick={() => onClick(job.id)}
+    className="glass-panel p-6 rounded-2xl hover-lift cursor-pointer transition-all group"
+  >
+    <div className="flex items-start justify-between mb-4">
+      <div className="flex-1">
+        <h3 className="text-xl font-bold mb-2 group-hover:text-[#FF6B35] transition-colors">
+          {job.title}
+        </h3>
+        <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+          <div className="flex items-center space-x-1">
+            <MapPin className="w-4 h-4" />
+            <span>{job.location}</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Briefcase className="w-4 h-4" />
+            <span>{job.type}</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Clock className="w-4 h-4" />
+            <span>{job.posted_date || 'Recently'}</span>
+          </div>
+        </div>
+      </div>
+      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-[#FF6B35] group-hover:translate-x-1 transition-all" />
+    </div>
+    <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">
+      {job.description}
+    </p>
+    <div className="flex flex-wrap gap-2">
+      {job.department && (
+        <span className="px-3 py-1 bg-[#FF6B35]/10 text-[#FF6B35] rounded-full text-xs font-medium">
+          {job.department}
+        </span>
+      )}
+      {job.experience_level && (
+        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+          {job.experience_level}
+        </span>
+      )}
+    </div>
+  </div>
+));
+JobCard.displayName = 'JobCard';
 
 export default function Careers() {
   const router = useRouter();
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Memoized job click handler
+  const handleJobClick = useCallback((jobId) => {
+    router.push(`/careers/${jobId}`);
+  }, [router]);
 
   // Fetch real jobs from API
   useEffect(() => {
@@ -75,13 +127,13 @@ export default function Careers() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <button
             onClick={() => router.push('/')}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
@@ -228,44 +280,8 @@ export default function Careers() {
               </div>
             ) : (
               <div className="space-y-4">
-                {jobs.map((job, index) => (
-                  <div
-                    key={job.id}
-                    className="glass-panel p-6 rounded-2xl hover-lift transition-all cursor-pointer group"
-                    onClick={() => router.push(`/careers/${job.id}`)}
-                  >
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold mb-2 group-hover:text-[#FF6B35] transition-colors">
-                          {job.title}
-                        </h3>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-400">
-                          <div className="flex items-center space-x-2">
-                            <Briefcase className="w-4 h-4" />
-                            <span>{job.department || 'Not specified'}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <MapPin className="w-4 h-4" />
-                            <span>{job.location || 'Remote'}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Clock className="w-4 h-4" />
-                            <span>{job.job_type || job.type || 'Full-time'}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/careers/${job.id}/apply`);
-                        }}
-                        className="px-6 py-3 bg-[#FF6B35] text-white rounded-lg hover:bg-[#F77F00] transition-all font-semibold flex items-center space-x-2 self-start md:self-center"
-                      >
-                        <span>Apply Now</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
+                {jobs.map((job) => (
+                  <JobCard key={job.id} job={job} onClick={handleJobClick} />
                 ))}
               </div>
             )}

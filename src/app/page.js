@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { ArrowRight, Sparkles, Zap, Target, TrendingUp, Shield, Clock, Users, CheckCircle, Menu, X, Brain, Layers, LineChart, Linkedin, Github } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -9,22 +9,23 @@ export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleScroll = useCallback(() => {
+    // Throttle scroll updates for better performance
+    window.requestAnimationFrame(() => {
+      setScrollY(window.scrollY);
+    });
+  }, []);
+  
+  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [handleScroll]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,7 +34,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const features = [
+  const features = useMemo(() => [
     {
       icon: <Brain className="w-6 h-6" />,
       title: "Neural Screening",
@@ -62,16 +63,16 @@ export default function Home() {
       stat: "2x productivity",
       color: "#06A77D"
     }
-  ];
+  ], []);
 
-  const stats = [
+  const stats = useMemo(() => [
     { value: "10K+", label: "Resumes Analyzed", color: "#FF6B35" },
     { value: "500+", label: "Companies", color: "#004E89" },
     { value: "70%", label: "Time Reduction", color: "#F77F00" },
     { value: "4.9", label: "Rating", color: "#06A77D" }
-  ];
+  ], []);
 
-  const plans = [
+  const plans = useMemo(() => [
     {
       name: "Starter",
       price: "₹1,999",
@@ -116,17 +117,17 @@ export default function Home() {
       ],
       highlighted: false
     }
-  ];
+  ], []);
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-white text-black font-sans overflow-x-hidden">
       {/* Noise Texture */}
       <div className="noise"></div>
 
       {/* Navigation */}
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrollY > 50 ? 'bg-[#0A0E27]/95 backdrop-blur-lg shadow-2xl border-b border-white/10' : 'bg-transparent'
+          scrollY > 50 ? 'bg-white/95 backdrop-blur-lg shadow-2xl border-b border-gray-200' : 'bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-5">
@@ -139,15 +140,15 @@ export default function Home() {
                 </div>
               </div>
               <span className="text-2xl font-bold tracking-tight">HireLens</span>
-              <span className="text-xs font-mono text-gray-400 tracking-wider">AI</span>
+              <span className="text-xs font-mono text-gray-600 tracking-wider">AI</span>
             </div>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <button onClick={() => router.push('/features')} className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">Features</button>
-              <button onClick={() => router.push('/pricing')} className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">Pricing</button>
-              <button onClick={() => router.push('/about')} className="text-gray-300 hover:text-[#FF6B35] transition-colors font-medium">About</button>
-              <button onClick={() => router.push('/signin')} className="px-6 py-2 text-gray-300 hover:text-white transition-colors font-medium">
+              <button onClick={() => router.push('/features')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">Features</button>
+              <button onClick={() => router.push('/pricing')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">Pricing</button>
+              <button onClick={() => router.push('/about')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">About</button>
+              <button onClick={() => router.push('/signin')} className="px-6 py-2 text-gray-600 hover:text-black transition-colors font-medium">
                 Sign In
               </button>
               <button onClick={() => router.push('/signup')} className="px-6 py-2 bg-[#FF6B35] text-white rounded-lg hover:bg-[#F77F00] transition-all font-semibold hover:shadow-lg hover:shadow-[#FF6B35]/50">
@@ -158,7 +159,7 @@ export default function Home() {
             {/* Mobile Menu Button */}
             <button 
               className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -166,11 +167,11 @@ export default function Home() {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden mt-6 pb-4 space-y-4 animate-fadeIn border-t border-white/10 pt-4">
-              <button onClick={() => router.push('/features')} className="block text-left text-gray-300 hover:text-[#FF6B35] font-medium">Features</button>
-              <button onClick={() => router.push('/pricing')} className="block text-left text-gray-300 hover:text-[#FF6B35] font-medium">Pricing</button>
-              <button onClick={() => router.push('/about')} className="block text-left text-gray-300 hover:text-[#FF6B35] font-medium">About</button>
-              <button onClick={() => router.push('/signin')} className="block w-full px-6 py-2 text-gray-300 border border-gray-600 rounded-lg font-medium">
+            <div className="md:hidden mt-6 pb-4 space-y-4 animate-fadeIn border-t border-gray-200 pt-4">
+              <button onClick={() => router.push('/features')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">Features</button>
+              <button onClick={() => router.push('/pricing')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">Pricing</button>
+              <button onClick={() => router.push('/about')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">About</button>
+              <button onClick={() => router.push('/signin')} className="block w-full px-6 py-2 text-gray-600 border border-gray-600 rounded-lg font-medium">
                 Sign In
               </button>
               <button onClick={() => router.push('/signup')} className="block w-full px-6 py-2 bg-[#FF6B35] text-white rounded-lg font-semibold">
@@ -205,7 +206,7 @@ export default function Home() {
               Not <span className="gradient-text">Harder</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed animate-fadeIn" style={{ animationDelay: '0.4s' }}>
+            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed animate-fadeIn" style={{ animationDelay: '0.4s' }}>
               AI-powered recruitment that understands talent beyond keywords. Screen thousands of candidates in seconds with unprecedented accuracy.
             </p>
             
@@ -214,7 +215,7 @@ export default function Home() {
                 <span>Start Free Trial</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="px-8 py-4 glass-panel text-white rounded-lg font-semibold hover:bg-white/10 transition-all">
+              <button className="px-8 py-4 glass-panel text-black rounded-lg font-semibold hover:bg-gray-100 transition-all">
                 Watch Demo
               </button>
             </div>
@@ -226,7 +227,7 @@ export default function Home() {
                   <div className="text-4xl md:text-5xl font-bold mb-2 font-mono" style={{ color: stat.color }}>
                     {stat.value}
                   </div>
-                  <div className="text-sm text-gray-400 font-medium tracking-wide">{stat.label}</div>
+                  <div className="text-sm text-gray-600 font-medium tracking-wide">{stat.label}</div>
                   <div className="h-1 w-12 mx-auto mt-3 rounded-full bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: stat.color }}></div>
                 </div>
               ))}
@@ -237,7 +238,7 @@ export default function Home() {
 
       {/* Features Section */}
       <section id="features" className="py-24 px-6 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F1433] to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-20">
@@ -247,7 +248,7 @@ export default function Home() {
             <h2 className="text-5xl md:text-6xl font-bold mb-6">
               Built for <span className="gradient-text">Modern</span> Teams
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Enterprise-grade AI that transforms how you discover and evaluate talent
             </p>
           </div>
@@ -286,7 +287,7 @@ export default function Home() {
                 </div>
                 
                 <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -353,7 +354,7 @@ export default function Home() {
                     STEP {item.step}
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-                  <p className="text-gray-400 leading-relaxed">{item.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -363,7 +364,7 @@ export default function Home() {
 
       {/* Pricing Section */}
       <section id="pricing" className="py-24 px-6 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0F1433] to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50 to-transparent"></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-20">
@@ -373,7 +374,7 @@ export default function Home() {
             <h2 className="text-5xl md:text-6xl font-bold mb-6">
               Simple, <span className="gradient-text">Transparent</span>
             </h2>
-            <p className="text-xl text-gray-400">Choose the plan that scales with your team</p>
+            <p className="text-xl text-gray-600">Choose the plan that scales with your team</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -393,17 +394,17 @@ export default function Home() {
                 )}
                 
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <p className="text-gray-400 text-sm mb-6">{plan.description}</p>
+                <p className="text-gray-600 text-sm mb-6">{plan.description}</p>
                 
                 <div className="mb-8">
                   <span className="text-5xl font-bold font-mono">{plan.price}</span>
-                  <span className="text-gray-400 font-mono">{plan.period}</span>
+                  <span className="text-gray-600 font-mono">{plan.period}</span>
                 </div>
 
                 <button onClick={() => plan.name === 'Enterprise' ? null : router.push('/signup')} className={`w-full py-3 rounded-lg font-semibold transition-all mb-8 ${
                   plan.highlighted
                     ? 'bg-[#FF6B35] text-white hover:bg-[#F77F00] hover:shadow-lg hover:shadow-[#FF6B35]/50'
-                    : 'bg-white/5 text-white hover:bg-white/10'
+                    : 'bg-gray-100 text-black hover:bg-gray-200 border border-gray-200'
                 }`}>
                   {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
                 </button>
@@ -412,7 +413,7 @@ export default function Home() {
                   {plan.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start space-x-3">
                       <CheckCircle className="w-5 h-5 text-[#06A77D] flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-300 text-sm">{feature}</span>
+                      <span className="text-gray-600 text-sm">{feature}</span>
                     </div>
                   ))}
                 </div>
@@ -434,7 +435,7 @@ export default function Home() {
                 Ready to Transform
                 <br />Your <span className="gradient-text">Hiring Process</span>?
               </h2>
-              <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+              <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
                 Join 500+ companies using HireLens AI to find exceptional talent faster
               </p>
               
@@ -443,7 +444,7 @@ export default function Home() {
                   <span>Start Free Trial</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button className="px-8 py-4 glass-panel text-white rounded-lg font-semibold hover:bg-white/10 transition-all">
+                <button className="px-8 py-4 glass-panel text-black rounded-lg font-semibold hover:bg-gray-100 transition-all">
                   Schedule Demo
                 </button>
               </div>
@@ -453,7 +454,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-12 px-6">
+      <footer className="border-t border-gray-200 py-12 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
@@ -466,14 +467,14 @@ export default function Home() {
                 </div>
                 <span className="text-xl font-bold">HireLens</span>
               </div>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 AI-powered recruitment platform helping companies discover exceptional talent.
               </p>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-600">
                 <li><button onClick={() => router.push('/features')} className="hover:text-[#FF6B35] transition-colors">Features</button></li>
                 <li><button onClick={() => router.push('/pricing')} className="hover:text-[#FF6B35] transition-colors">Pricing</button></li>
                 <li><button onClick={() => router.push('/api-docs')} className="hover:text-[#FF6B35] transition-colors">API</button></li>
@@ -483,7 +484,7 @@ export default function Home() {
 
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-600">
                 <li><button onClick={() => router.push('/about')} className="hover:text-[#FF6B35] transition-colors">About</button></li>
                 <li><button onClick={() => router.push('/blog')} className="hover:text-[#FF6B35] transition-colors">Blog</button></li>
                 <li><button onClick={() => router.push('/careers')} className="hover:text-[#FF6B35] transition-colors">Careers</button></li>
@@ -493,7 +494,7 @@ export default function Home() {
 
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-gray-600">
                 <li><button onClick={() => router.push('/privacy')} className="hover:text-[#FF6B35] transition-colors">Privacy</button></li>
                 <li><button onClick={() => router.push('/terms')} className="hover:text-[#FF6B35] transition-colors">Terms</button></li>
                 <li><button onClick={() => router.push('/security')} className="hover:text-[#FF6B35] transition-colors">Security</button></li>
@@ -501,7 +502,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
+          <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
             <p>© 2024 HireLens AI. All rights reserved.</p>
             <div className="flex items-center space-x-4 mt-4 md:mt-0">
               <a href="#" className="p-2 hover:bg-[#FF6B35]/10 hover:text-[#FF6B35] rounded-lg transition-colors">

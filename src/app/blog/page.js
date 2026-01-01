@@ -1,11 +1,20 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, Brain, Calendar, Clock, ArrowRight } from 'lucide-react';
 
+export const metadata = {
+  title: 'Blog | HireLens - AI Recruitment Insights & Best Practices',
+  description: 'Explore the latest insights on AI recruitment, hiring best practices, and product updates from HireLens.',
+  openGraph: {
+    title: 'HireLens Blog',
+    description: 'AI recruitment insights and best practices',
+  },
+};
+
+// ISR: Revalidate every 1 hour
+export const revalidate = 3600;
+
 export default function Blog() {
-  const router = useRouter();
 
   const blogPosts = [
     {
@@ -69,17 +78,17 @@ export default function Blog() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => router.push('/')}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+          <Link
+            href="/"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
-          </button>
+          </Link>
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg flex items-center justify-center">
               <Brain className="w-5 h-5 text-white" />

@@ -5,7 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { 
   ArrowLeft, Mail, Phone, MapPin, Download, Calendar, 
   CheckCircle, XCircle, Star, Briefcase, GraduationCap,
-  Award, Clock, Send
+  Award, Clock, Send, Brain, TrendingUp, AlertTriangle, ThumbsUp,
+  Sparkles, Link2, Copy
 } from 'lucide-react';
 import { candidatesApi, interviewsApi } from '@/lib/api';
 
@@ -16,8 +17,13 @@ export default function CandidateDetailPage() {
 
   const [candidate, setCandidate] = useState(null);
   const [interviews, setInterviews] = useState([]);
+  const [aiAnalysis, setAiAnalysis] = useState(null);
+  const [selectedInterview, setSelectedInterview] = useState(null);
+  const [showAiAnalysis, setShowAiAnalysis] = useState(false);
+  const [generatingQuestions, setGeneratingQuestions] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingInterviews, setIsLoadingInterviews] = useState(false);
+  const [isLoadingAiAnalysis, setIsLoadingAiAnalysis] = useState(false);
   const [error, setError] = useState('');
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [interviewForm, setInterviewForm] = useState({
@@ -54,6 +60,14 @@ export default function CandidateDetailPage() {
       setIsLoadingInterviews(true);
       const data = await interviewsApi.getCandidateInterviews(candidateId);
       setInterviews(data.interviews || []);
+      
+      // Check if any interview is completed and has AI analysis
+      const completedInterview = data.interviews?.find(
+        i => i.interview_status === 'completed' && i.ai_score
+      );
+      if (completedInterview) {
+        setSelectedInterview(completedInterview);
+      }
     } catch (err) {
       console.error('Failed to load interviews:', err);
     } finally {
@@ -61,16 +75,78 @@ export default function CandidateDetailPage() {
     }
   };
 
+  const loadAiAnalysis = async (interviewId) => {
+    try {
+      setIsLoadingAiAnalysis(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/analysis`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to load AI analysis');
+
+      const data = await response.json();
+      setAiAnalysis(data);
+      setShowAiAnalysis(true);
+    } catch (err) {
+      setToast({ show: true, message: 'Failed to load AI analysis', type: 'error' });
+      setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+    } finally {
+      setIsLoadingAiAnalysis(false);
+    }
+  };
+
+  const handleGenerateQuestions = async (interviewId) => {
+    try {
+      setGeneratingQuestions(true);
+      const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/generate-questions`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          num_questions: 5
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to generate questions');
+
+      const data = await response.json();
+      setToast({ show: true, message: `${data.total_questions} AI questions generated!`, type: 'success' });
+      setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+      
+      // Reload interviews to show updated status
+      loadInterviews();
+    } catch (err) {
+      setToast({ show: true, message: err.message || 'Failed to generate questions', type: 'error' });
+      setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+    } finally {
+      setGeneratingQuestions(false);
+    }
+  };
+
+  const copyInterviewLink = (interviewId) => {
+    const link = `${window.location.origin}/interview/${interviewId}`;
+    navigator.clipboard.writeText(link);
+    setToast({ show: true, message: 'Interview link copied to clipboard!', type: 'success' });
+    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+  };
+
   const handleScheduleInterview = async (e) => {
     e.preventDefault();
     try {
-      await interviewsApi.scheduleInterview({
+      // Schedule the interview
+      const result = await interviewsApi.scheduleInterview({
         resume_id: parseInt(candidateId),
         job_id: candidate.job_id,
         ...interviewForm
       });
       
-      setToast({ show: true, message: 'Interview scheduled successfully!', type: 'success' });
+      setToast({ show: true, message: 'AI Interview scheduled! Generating questions...', type: 'success' });
       setShowScheduleModal(false);
       setInterviewForm({
         interview_type: 'screening',
@@ -82,6 +158,48 @@ export default function CandidateDetailPage() {
         interviewer_email: '',
         notes: ''
       });
+      
+      // Automatically generate AI questions for AI interviews
+      const interviewId = result.interview?.id || result.interview_id || result.id;
+      if (interviewId && interviewForm.interview_mode === 'ai') {
+        try {
+          const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+          
+          if (!token) {
+            console.error('No token found for AI question generation');
+            setToast({ show: true, message: 'Authentication error. Please refresh and try again.', type: 'error' });
+            setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+            loadInterviews();
+            return;
+          }
+
+          const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/generate-questions`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ num_questions: 5 })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setToast({ show: true, message: `AI Interview ready! ${data.total_questions} questions generated.`, type: 'success' });
+            setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+            loadInterviews();
+          } else {
+            const errorData = await response.json();
+            console.error('Question generation failed:', errorData);
+            setToast({ show: true, message: errorData.error || 'Failed to generate questions', type: 'error' });
+            setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+          }
+        } catch (err) {
+          console.error('Error generating questions:', err);
+          setToast({ show: true, message: 'Failed to generate questions. Please try manually.', type: 'error' });
+          setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+        }
+      }
+      
       loadInterviews();
       setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
     } catch (err) {
@@ -170,15 +288,15 @@ export default function CandidateDetailPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <button
           onClick={() => router.back()}
-          className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+          className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors w-fit"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Candidates</span>
+          <span className="text-sm md:text-base">Back to Candidates</span>
         </button>
       </div>
 
@@ -362,11 +480,12 @@ export default function CandidateDetailPage() {
           {/* Interviews */}
           <div className="glass-panel rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">Interviews</h3>
+              <h3 className="font-semibold">AI Interviews</h3>
               <button
                 onClick={() => setShowScheduleModal(true)}
-                className="px-3 py-1 bg-[#004E89] hover:bg-[#004E89]/80 rounded text-sm transition-all"
+                className="px-3 py-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 rounded text-sm transition-all flex items-center gap-1"
               >
+                <Sparkles className="h-3 w-3" />
                 Schedule
               </button>
             </div>
@@ -381,6 +500,53 @@ export default function CandidateDetailPage() {
                     <div className="text-xs text-gray-400 mt-1">
                       {new Date(interview.scheduled_date).toLocaleString()}
                     </div>
+                    
+                    {/* AI Questions Status */}
+                    {interview.status === 'scheduled' && (
+                      <div className="mt-2 space-y-2">
+                        {interview.ai_questions ? (
+                          <>
+                            <div className="flex items-center gap-1 text-xs text-green-400">
+                              <CheckCircle className="h-3 w-3" />
+                              <span>AI Questions Ready</span>
+                            </div>
+                            <button
+                              onClick={() => copyInterviewLink(interview.id)}
+                              className="w-full px-2 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded text-xs transition-all flex items-center justify-center gap-1"
+                            >
+                              <Copy className="h-3 w-3" />
+                              Copy Interview Link
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => handleGenerateQuestions(interview.id)}
+                            disabled={generatingQuestions}
+                            className="w-full px-2 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded text-xs transition-all flex items-center justify-center gap-1 disabled:opacity-50"
+                          >
+                            <Sparkles className="h-3 w-3" />
+                            {generatingQuestions ? 'Generating...' : 'Generate AI Questions'}
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Completed Interview - Show AI Score */}
+                    {interview.interview_status === 'completed' && interview.ai_score && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <div className="flex-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded px-2 py-1">
+                          <span className="text-xs text-gray-600">AI Score: </span>
+                          <span className="text-sm font-bold text-black">{interview.ai_score}%</span>
+                        </div>
+                        <button
+                          onClick={() => loadAiAnalysis(interview.id)}
+                          className="text-xs px-2 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 rounded transition-all"
+                        >
+                          View Analysis
+                        </button>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center justify-between mt-2">
                       <span className={`px-2 py-1 rounded text-xs ${
                         interview.status === 'completed' ? 'bg-green-500/20 text-green-400' :
@@ -408,14 +574,201 @@ export default function CandidateDetailPage() {
         </div>
       </div>
 
-      {/* Schedule Interview Modal */}
+      {/* AI Analysis Modal */}
+      {showAiAnalysis && aiAnalysis && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-gradient-to-br from-[#0A1929] to-[#1A2332] border border-white/10 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="sticky top-0 bg-gradient-to-r from-[#004E89] to-[#FF6B35] p-6 rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <Brain className="h-7 w-7" />
+                    AI Interview Analysis
+                  </h2>
+                  <p className="text-white/80 mt-1">{aiAnalysis.candidate_name}</p>
+                </div>
+                <button
+                  onClick={() => setShowAiAnalysis(false)}
+                  className="text-white/80 hover:text-white text-2xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Overall Score */}
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="glass-panel p-6 rounded-xl text-center">
+                  <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                    {aiAnalysis.ai_score}%
+                  </div>
+                  <div className="text-sm text-gray-400 mt-1">Overall Score</div>
+                </div>
+
+                <div className="glass-panel p-6 rounded-xl text-center">
+                  <div className={`text-2xl font-bold ${
+                    aiAnalysis.overall_analysis?.recommendation === 'STRONG_HIRE' ? 'text-green-400' :
+                    aiAnalysis.overall_analysis?.recommendation === 'HIRE' ? 'text-blue-400' :
+                    aiAnalysis.overall_analysis?.recommendation === 'MAYBE' ? 'text-yellow-400' :
+                    'text-red-400'
+                  }`}>
+                    {aiAnalysis.overall_analysis?.recommendation?.replace('_', ' ') || 'N/A'}
+                  </div>
+                  <div className="text-sm text-gray-400 mt-1">Recommendation</div>
+                </div>
+
+                <div className="glass-panel p-6 rounded-xl text-center">
+                  <div className="text-3xl font-bold text-white">
+                    {aiAnalysis.total_questions || 0}
+                  </div>
+                  <div className="text-sm text-gray-400 mt-1">Questions Answered</div>
+                </div>
+              </div>
+
+              {/* Summary */}
+              {aiAnalysis.overall_analysis?.summary && (
+                <div className="glass-panel p-6 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-blue-400" />
+                    Executive Summary
+                  </h3>
+                  <p className="text-gray-300">{aiAnalysis.overall_analysis.summary}</p>
+                </div>
+              )}
+
+              {/* Strengths & Weaknesses */}
+              <div className="grid md:grid-cols-2 gap-4">
+                {aiAnalysis.overall_analysis?.strengths?.length > 0 && (
+                  <div className="glass-panel p-6 rounded-xl">
+                    <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-green-400">
+                      <ThumbsUp className="h-5 w-5" />
+                      Strengths
+                    </h3>
+                    <ul className="space-y-2">
+                      {aiAnalysis.overall_analysis.strengths.map((strength, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-300">
+                          <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                          <span>{strength}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {aiAnalysis.overall_analysis?.weaknesses?.length > 0 && (
+                  <div className="glass-panel p-6 rounded-xl">
+                    <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-orange-400">
+                      <AlertTriangle className="h-5 w-5" />
+                      Areas for Improvement
+                    </h3>
+                    <ul className="space-y-2">
+                      {aiAnalysis.overall_analysis.weaknesses.map((weakness, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-300">
+                          <XCircle className="h-4 w-4 text-orange-400 mt-0.5 flex-shrink-0" />
+                          <span>{weakness}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              {/* Decision Rationale */}
+              {aiAnalysis.overall_analysis?.decision_rationale && (
+                <div className="glass-panel p-6 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-3">Decision Rationale</h3>
+                  <p className="text-gray-300">{aiAnalysis.overall_analysis.decision_rationale}</p>
+                </div>
+              )}
+
+              {/* Question-by-Question Analysis */}
+              {aiAnalysis.questions_with_answers?.length > 0 && (
+                <div className="glass-panel p-6 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-4">Detailed Question Analysis</h3>
+                  <div className="space-y-4">
+                    {aiAnalysis.questions_with_answers.map((q, idx) => (
+                      <div key={q.id} className="bg-white/5 p-4 rounded-lg">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-semibold text-white">Q{idx + 1}.</span>
+                              <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">
+                                {q.category}
+                              </span>
+                              <span className="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded">
+                                {q.difficulty}
+                              </span>
+                            </div>
+                            <p className="text-gray-300 text-sm">{q.question}</p>
+                          </div>
+                          <div className="text-right ml-4">
+                            <div className={`text-lg font-bold ${
+                              (q.score / q.max_score) >= 0.8 ? 'text-green-400' :
+                              (q.score / q.max_score) >= 0.6 ? 'text-blue-400' :
+                              (q.score / q.max_score) >= 0.4 ? 'text-yellow-400' :
+                              'text-red-400'
+                            }`}>
+                              {q.score}/{q.max_score}
+                            </div>
+                            <div className="text-xs text-gray-400">points</div>
+                          </div>
+                        </div>
+
+                        {q.answer && (
+                          <div className="mt-3 p-3 bg-black/20 rounded">
+                            <div className="text-xs text-gray-400 mb-1">Answer:</div>
+                            <p className="text-sm text-gray-300">{q.answer}</p>
+                          </div>
+                        )}
+
+                        {q.feedback && (
+                          <div className="mt-3 p-3 bg-blue-500/10 rounded border border-blue-500/20">
+                            <div className="text-xs text-blue-400 mb-1">AI Feedback:</div>
+                            <p className="text-sm text-gray-300">{q.feedback}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Next Steps */}
+              {aiAnalysis.overall_analysis?.next_steps && (
+                <div className="glass-panel p-6 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-3 text-purple-400">Recommended Next Steps</h3>
+                  <p className="text-gray-300">{aiAnalysis.overall_analysis.next_steps}</p>
+                </div>
+              )}
+
+              {/* Close Button */}
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowAiAnalysis(false)}
+                  className="px-6 py-3 bg-gradient-to-r from-[#004E89] to-[#FF6B35] hover:opacity-90 rounded-lg font-semibold transition-all"
+                >
+                  Close Analysis
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule AI Interview Modal */}
       {showScheduleModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-6">
           <div className="bg-[#0F1433] border border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="sticky top-0 bg-[#0F1433] p-6 border-b border-white/10 flex items-start justify-between z-10">
               <div>
-                <h2 className="text-2xl font-bold mb-2">Schedule Interview</h2>
+                <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 text-purple-400" />
+                  Schedule AI Interview
+                </h2>
                 <p className="text-gray-400">{candidate.candidate_name}</p>
+                <p className="text-xs text-purple-400 mt-1">AI questions will be generated automatically</p>
               </div>
               <button
                 onClick={() => setShowScheduleModal(false)}
@@ -532,9 +885,10 @@ export default function CandidateDetailPage() {
               <div className="flex items-center space-x-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-[#06A77D] hover:bg-[#06A77D]/80 rounded-lg font-semibold transition-all"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:opacity-90 rounded-lg font-semibold transition-all flex items-center justify-center gap-2"
                 >
-                  Schedule & Send Invitation
+                  <Sparkles className="h-5 w-5" />
+                  Schedule AI Interview
                 </button>
                 <button
                   type="button"

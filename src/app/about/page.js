@@ -1,11 +1,17 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, Brain, Target, Users, TrendingUp, Award, Globe, Zap } from 'lucide-react';
 
+export const metadata = {
+  title: 'About Us | HireLens - AI-Powered Recruitment Platform',
+  description: 'Learn about HireLens mission to revolutionize recruitment through AI technology. Meet our team and discover our values.',
+  openGraph: {
+    title: 'About HireLens',
+    description: 'Making hiring smarter, faster, and fairer using AI',
+  },
+};
+
 export default function About() {
-  const router = useRouter();
 
   const values = [
     {
@@ -58,17 +64,17 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => router.push('/')}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+          <Link
+            href="/"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
-          </button>
+          </Link>
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg flex items-center justify-center">
               <Brain className="w-5 h-5 text-white" />
@@ -87,7 +93,7 @@ export default function About() {
               <Globe className="w-12 h-12 text-[#FF6B35]" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">About HireLens</h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               We're on a mission to make hiring smarter, faster, and fairer using the power of artificial intelligence.
             </p>
           </div>
@@ -96,7 +102,7 @@ export default function About() {
           <section className="mb-16">
             <div className="glass-panel p-8 rounded-2xl">
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-              <div className="space-y-4 text-gray-300 leading-relaxed">
+              <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
                   HireLens AI was founded in 2023 by a team of AI researchers and HR professionals who saw firsthand how broken the recruitment process had become. Traditional methods were time-consuming, biased, and often missed the best candidates.
                 </p>
@@ -117,7 +123,7 @@ export default function About() {
                 <Zap className="w-8 h-8 text-[#FF6B35]" />
                 <h2 className="text-2xl font-bold">Our Mission</h2>
               </div>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed">
                 To revolutionize recruitment by making it faster, more accurate, and completely bias-free through advanced AI technology that empowers hiring teams to make better decisions.
               </p>
             </div>
@@ -127,7 +133,7 @@ export default function About() {
                 <Target className="w-8 h-8 text-[#004E89]" />
                 <h2 className="text-2xl font-bold">Our Vision</h2>
               </div>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed">
                 A world where every person has an equal opportunity to showcase their talents, and every company has access to the best talent regardless of location or background.
               </p>
             </div>

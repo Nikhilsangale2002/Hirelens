@@ -90,12 +90,11 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white flex items-center justify-center px-6 py-12 relative">
+    <div className="min-h-screen bg-white text-black flex items-center justify-center px-6 py-12 relative">
       {/* Back to Home Button - Top Left */}
       <button 
         onClick={() => router.push('/')}
-        className="absolute top-6 left-6 inline-flex items-center space-x-2 text-gray-400 hover:text-white transition-colors z-20"
-      >
+        className="absolute top-6 left-6 inline-flex items-center space-x-2 text-gray-600 hover:text-black transition-colors z-20">
         <ArrowRight className="w-5 h-5 rotate-180" />
         <span>Back to Home</span>
       </button>
@@ -112,7 +111,7 @@ export default function SignIn() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Welcome <span className="gradient-text">Back</span>
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-600">
             Sign in to your HireLens account
           </p>
         </div>
@@ -130,10 +129,10 @@ export default function SignIn() {
           {/* Divider */}
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10"></div>
+              <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-[#0a0a0a] text-gray-400">Or continue with email</span>
+              <span className="px-4 bg-white text-gray-600">Or continue with email</span>
             </div>
           </div>
 
@@ -163,7 +162,7 @@ export default function SignIn() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                 <input
                   type="email"
                   id="email"
@@ -171,7 +170,7 @@ export default function SignIn() {
                   value={formData.email}
                   onChange={handleChange}
                   className={`w-full pl-12 pr-4 py-3 bg-white/5 border ${
-                    errors.email ? 'border-red-500' : 'border-white/10'
+                    errors.email ? 'border-red-500' : 'border-gray-200'
                   } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                   placeholder="john@example.com"
                 />
@@ -187,7 +186,7 @@ export default function SignIn() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -195,14 +194,14 @@ export default function SignIn() {
                   value={formData.password}
                   onChange={handleChange}
                   className={`w-full pl-12 pr-12 py-3 bg-white/5 border ${
-                    errors.password ? 'border-red-500' : 'border-white/10'
+                    errors.password ? 'border-red-500' : 'border-gray-200'
                   } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -219,7 +218,7 @@ export default function SignIn() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-white/10 bg-white/5 text-[#FF6B35] focus:ring-[#FF6B35] focus:ring-offset-0"
+                  className="w-4 h-4 rounded border-gray-200 bg-white/5 text-[#FF6B35] focus:ring-[#FF6B35] focus:ring-offset-0"
                 />
                 <span className="text-sm text-gray-400">Remember me</span>
               </label>
@@ -256,7 +255,7 @@ export default function SignIn() {
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               Don't have an account?{' '}
               <button
                 onClick={() => router.push('/signup')}

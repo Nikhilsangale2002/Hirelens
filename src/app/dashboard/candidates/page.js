@@ -68,10 +68,10 @@ export default function CandidatesPage() {
   };
 
   return (
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2">All Candidates</h1>
-          <p className="text-gray-400">View and manage candidates across all jobs</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">All Candidates</h1>
+          <p className="text-sm md:text-base text-gray-400">View and manage candidates across all jobs</p>
         </div>
 
         {/* Error Message */}
@@ -82,7 +82,7 @@ export default function CandidatesPage() {
         )}
 
         {/* Filters */}
-        <form onSubmit={handleSearch} className="glass-panel rounded-2xl p-4 flex gap-4">
+        <form onSubmit={handleSearch} className="glass-panel rounded-2xl p-4 flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -133,18 +133,18 @@ export default function CandidatesPage() {
           <>
             {/* Candidates List */}
             <div className="space-y-4">{filteredCandidates.map((candidate) => (
-            <div key={candidate.id} className="glass-panel rounded-2xl p-6 hover-lift">
-              <div className="flex items-start justify-between">
+            <div key={candidate.id} className="glass-panel rounded-2xl p-4 md:p-6 hover-lift">
+              <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center space-x-4 mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:space-x-4 mb-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-full flex items-center justify-center text-xl font-bold">
                       {(candidate.candidate_name || 'U').charAt(0)}
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold">{candidate.candidate_name || 'Unknown'}</h3>
-                      <p className="text-sm text-gray-400">{candidate.job_title || 'No job title'}</p>
+                    <div className="flex-1">
+                      <h3 className="text-lg md:text-xl font-bold">{candidate.candidate_name || 'Unknown'}</h3>
+                      <p className="text-xs md:text-sm text-gray-400">{candidate.job_title || 'No job title'}</p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium w-fit ${
                       candidate.status === 'shortlisted' ? 'bg-[#06A77D]/20 text-[#06A77D]' :
                       candidate.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
                       candidate.status === 'hired' ? 'bg-purple-500/20 text-purple-400' :
@@ -154,8 +154,8 @@ export default function CandidatesPage() {
                     </span>
                   </div>
 
-                  <div className="grid md:grid-cols-3 gap-4 mb-4">
-                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 mb-4">
+                    <div className="flex items-center space-x-2 text-xs md:text-sm text-gray-400">
                       <Mail className="w-4 h-4" />
                       <span>{candidate.email || 'No email'}</span>
                     </div>
@@ -183,10 +183,10 @@ export default function CandidatesPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end space-y-4">
+                <div className="flex lg:flex-col items-center lg:items-end justify-between lg:justify-start gap-4 lg:space-y-4">
                   <div className="text-center">
                     <div
-                      className="text-4xl font-bold"
+                      className="text-3xl md:text-4xl font-bold"
                       style={{ color: getScoreColor(candidate.ai_score || 0) }}
                     >
                       {Math.round(candidate.ai_score || 0)}

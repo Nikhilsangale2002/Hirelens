@@ -174,10 +174,10 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Top Navigation */}
-      <nav className="fixed top-0 left-0 right-0 h-16 bg-[#0F1433] border-b border-white/10 z-50">
-        <div className="h-full px-6 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 h-14 md:h-16 bg-gray-50 border-b border-gray-200 z-50">
+        <div className="h-full px-4 md:px-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -191,7 +191,7 @@ export default function DashboardLayout({ children }) {
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold">HireLens</span>
-              <span className="text-xs font-mono text-gray-400">AI</span>
+              <span className="text-xs font-mono text-gray-600">AI</span>
             </div>
           </div>
 
@@ -214,9 +214,9 @@ export default function DashboardLayout({ children }) {
               </button>
 
               {showNotifications && (
-                <div className="absolute top-full right-0 mt-2 w-96 max-h-[500px] overflow-hidden bg-[#0F1433] rounded-xl shadow-2xl border border-white/10 z-50">
-                  <div className="sticky top-0 bg-[#0F1433] p-4 border-b border-white/10 flex items-center justify-between">
-                    <h3 className="font-semibold">Notifications</h3>
+                <div className="absolute top-full right-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 max-h-[500px] overflow-hidden bg-gray-50 rounded-xl shadow-2xl border border-gray-200 z-50">
+                  <div className="sticky top-0 bg-gray-50 p-3 sm:p-4 border-b border-gray-200 flex items-center justify-between">
+                    <h3 className="font-semibold text-sm sm:text-base">Notifications</h3>
                     {unreadCount > 0 && (
                       <button
                         onClick={handleMarkAllAsRead}
@@ -229,7 +229,7 @@ export default function DashboardLayout({ children }) {
 
                   <div className="max-h-[400px] overflow-y-auto">
                     {isLoadingNotifications ? (
-                      <div className="p-8 text-center text-gray-400">
+                      <div className="p-8 text-center text-gray-600">
                         <div className="animate-spin w-6 h-6 border-2 border-[#FF6B35] border-t-transparent rounded-full mx-auto"></div>
                       </div>
                     ) : notifications.length > 0 ? (
@@ -245,7 +245,7 @@ export default function DashboardLayout({ children }) {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 mb-1">
                                 <h4 className={`text-sm font-medium truncate ${
-                                  !notification.is_read ? 'text-white' : 'text-gray-300'
+                                  !notification.is_read ? 'text-black' : 'text-gray-600'
                                 }`}>
                                   {notification.title}
                                 </h4>
@@ -253,7 +253,7 @@ export default function DashboardLayout({ children }) {
                                   <span className="w-2 h-2 bg-[#FF6B35] rounded-full flex-shrink-0"></span>
                                 )}
                               </div>
-                              <p className="text-xs text-gray-400 line-clamp-2">
+                              <p className="text-xs text-gray-600 line-clamp-2">
                                 {notification.message}
                               </p>
                               <div className="flex items-center justify-between mt-2">
@@ -293,7 +293,7 @@ export default function DashboardLayout({ children }) {
                         </div>
                       ))
                     ) : (
-                      <div className="p-8 text-center text-gray-400">
+                      <div className="p-8 text-center text-gray-600">
                         <Bell className="w-12 h-12 mx-auto mb-3 opacity-50" />
                         <p>No notifications yet</p>
                       </div>
@@ -301,7 +301,7 @@ export default function DashboardLayout({ children }) {
                   </div>
 
                   {notifications.length > 0 && (
-                    <div className="sticky bottom-0 bg-[#0F1433] p-3 border-t border-white/10">
+                    <div className="sticky bottom-0 bg-gray-50 p-3 border-t border-gray-200">
                       <button
                         onClick={() => router.push('/dashboard/notifications')}
                         className="w-full text-sm text-center text-[#FF6B35] hover:underline"
@@ -335,14 +335,14 @@ export default function DashboardLayout({ children }) {
                 </div>
                 <div className="text-left hidden md:block">
                   <div className="text-sm font-medium">{userData?.name || 'Loading...'}</div>
-                  <div className="text-xs text-gray-400 capitalize">{planData?.name || 'Free'} Plan</div>
+                  <div className="text-xs text-gray-600 capitalize">{planData?.name || 'Free'} Plan</div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+                <ChevronDown className="w-4 h-4 text-gray-600" />
               </button>
 
               {showUserMenu && (
-                <div className="absolute top-full right-0 mt-2 w-56 bg-[#0F1433] rounded-xl overflow-hidden shadow-2xl border border-white/10">
-                  <div className="p-4 border-b border-white/10">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-gray-50 rounded-xl overflow-hidden shadow-2xl border border-gray-200">
+                  <div className="p-4 border-b border-gray-200">
                     <div className="text-sm font-medium">{userData?.email || 'user@example.com'}</div>
                     <div className="text-xs text-gray-400 mt-1 capitalize">
                       {planData ? `${planData.name} Plan - ${planData.jobs_used}/${planData.jobs_limit === -1 ? '∞' : planData.jobs_limit} jobs used` : 'Loading...'}
@@ -369,9 +369,17 @@ export default function DashboardLayout({ children }) {
         </div>
       </nav>
 
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Sidebar */}
       <aside
-        className={`fixed top-16 left-0 bottom-0 w-64 bg-[#0F1433] border-r border-white/10 transition-transform duration-300 z-40 ${
+        className={`fixed top-14 md:top-16 left-0 bottom-0 w-64 bg-gray-50 border-r border-gray-200 transition-transform duration-300 z-40 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -385,7 +393,7 @@ export default function DashboardLayout({ children }) {
                 className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
                   isActive
                     ? 'bg-[#FF6B35] text-white shadow-lg shadow-[#FF6B35]/20'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    : 'text-gray-600 hover:bg-white/5 hover:text-black'
                 }`}
               >
                 {item.icon}
@@ -402,7 +410,7 @@ export default function DashboardLayout({ children }) {
             {planData ? (
               <div className="space-y-3">
                 <div>
-                  <div className="flex justify-between text-xs text-gray-400 mb-1">
+                  <div className="flex justify-between text-xs text-gray-600 mb-1">
                     <span>Jobs</span>
                     <span>
                       {planData.jobs_used}/{planData.jobs_limit === -1 ? '∞' : planData.jobs_limit}
@@ -420,7 +428,7 @@ export default function DashboardLayout({ children }) {
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between text-xs text-gray-400 mb-1">
+                  <div className="flex justify-between text-xs text-gray-600 mb-1">
                     <span>Resumes</span>
                     <span>
                       {planData.resumes_used}/{planData.resumes_limit === -1 ? '∞' : planData.resumes_limit.toLocaleString()}
@@ -456,11 +464,11 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content */}
       <main
-        className={`pt-16 transition-all duration-300 ${
-          isSidebarOpen ? 'ml-64' : 'ml-0'
+        className={`pt-14 md:pt-16 transition-all duration-300 ${
+          isSidebarOpen ? 'ml-0 md:ml-64' : 'ml-0'
         }`}
       >
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <ProtectedRoute>
             {children}
           </ProtectedRoute>

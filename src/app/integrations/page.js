@@ -1,13 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Brain, Mail, Calendar, MessageSquare, Users, Database, Globe, Zap, CheckCircle } from 'lucide-react';
 
-export default function Integrations() {
-  const router = useRouter();
-
-  const integrations = [
+// Static data moved outside for performance
+const INTEGRATIONS_DATA = [
     {
       icon: <Mail className="w-8 h-8" />,
       name: "Gmail",
@@ -104,41 +102,70 @@ export default function Integrations() {
       color: "#06A77D",
       status: "Available"
     }
-  ];
+];
 
-  const categories = ['All', 'Email', 'Calendar', 'Communication', 'Social', 'Job Boards', 'ATS', 'HRIS', 'Automation'];
-  const [selectedCategory, setSelectedCategory] = React.useState('All');
+const CATEGORIES = ['All', 'Email', 'Calendar', 'Communication', 'Social', 'Job Boards', 'ATS', 'HRIS', 'Automation'];
 
-  const filteredIntegrations = selectedCategory === 'All' 
-    ? integrations 
-    : integrations.filter(int => int.category === selectedCategory);
+const BENEFITS = [
+  {
+    icon: <Zap className="w-8 h-8" />,
+    title: "Streamlined Workflow",
+    description: "Connect all your tools and automate repetitive tasks"
+  },
+  {
+    icon: <Database className="w-8 h-8" />,
+    title: "Centralized Data",
+    description: "Keep all candidate information in one place"
+  },
+  {
+    icon: <Users className="w-8 h-8" />,
+    title: "Better Collaboration",
+    description: "Work seamlessly with your team across platforms"
+  }
+];
 
-  const benefits = [
-    {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Streamlined Workflow",
-      description: "Connect all your tools and automate repetitive tasks"
-    },
-    {
-      icon: <Database className="w-8 h-8" />,
-      title: "Centralized Data",
-      description: "Keep all candidate information in one place"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Better Collaboration",
-      description: "Work seamlessly with your team across platforms"
-    }
-  ];
+// Memoized integration card component
+const IntegrationCard = React.memo(({ integration }) => (
+  <div className="glass-panel p-6 rounded-2xl hover-lift transition-all">
+    <div
+      className="w-14 h-14 rounded-xl flex items-center justify-center mb-4"
+      style={{
+        background: `linear-gradient(135deg, ${integration.color}33, ${integration.color}11)`,
+        color: integration.color
+      }}
+    >
+      {integration.icon}
+    </div>
+    <h3 className="text-lg font-bold mb-2">{integration.name}</h3>
+    <p className="text-sm text-gray-600 mb-3">{integration.category}</p>
+    <p className="text-sm text-gray-600 leading-relaxed mb-4">{integration.description}</p>
+    <div className="flex items-center space-x-2">
+      <CheckCircle className="w-4 h-4 text-[#06A77D]" />
+      <span className="text-xs font-medium text-[#06A77D]">{integration.status}</span>
+    </div>
+  </div>
+));
+IntegrationCard.displayName = 'IntegrationCard';
+
+export default function Integrations() {
+  const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const filteredIntegrations = useMemo(
+    () => selectedCategory === 'All' 
+      ? INTEGRATIONS_DATA 
+      : INTEGRATIONS_DATA.filter(int => int.category === selectedCategory),
+    [selectedCategory]
+  );
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <button
             onClick={() => router.push('/')}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
@@ -171,13 +198,13 @@ export default function Integrations() {
           {/* Benefits */}
           <section className="mb-16">
             <div className="grid md:grid-cols-3 gap-6">
-              {benefits.map((benefit, index) => (
+              {BENEFITS.map((benefit, index) => (
                 <div key={index} className="glass-panel p-6 rounded-2xl text-center">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#FF6B35]/20 to-[#F77F00]/20 flex items-center justify-center mx-auto mb-4 text-[#FF6B35]">
                     {benefit.icon}
                   </div>
                   <h3 className="text-lg font-bold mb-2">{benefit.title}</h3>
-                  <p className="text-gray-400 text-sm">{benefit.description}</p>
+                  <p className="text-gray-600 text-sm">{benefit.description}</p>
                 </div>
               ))}
             </div>
@@ -186,14 +213,14 @@ export default function Integrations() {
           {/* Category Filter */}
           <div className="mb-8">
             <div className="flex flex-wrap gap-3 justify-center">
-              {categories.map((category) => (
+              {CATEGORIES.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg transition-all ${
                     selectedCategory === category
                       ? 'bg-[#FF6B35] text-white'
-                      : 'glass-panel text-gray-400 hover:text-white hover:bg-white/10'
+                      : 'glass-panel text-gray-600 hover:text-black hover:bg-gray-100'
                   }`}
                 >
                   {category}
@@ -206,36 +233,7 @@ export default function Integrations() {
           <section className="mb-16">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredIntegrations.map((integration, index) => (
-                <div key={index} className="glass-panel p-6 rounded-2xl hover-lift transition-all">
-                  <div className="flex items-start justify-between mb-4">
-                    <div
-                      className="w-12 h-12 rounded-lg flex items-center justify-center"
-                      style={{
-                        background: `linear-gradient(135deg, ${integration.color}33, ${integration.color}11)`,
-                        color: integration.color
-                      }}
-                    >
-                      {integration.icon}
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      integration.status === 'Available' 
-                        ? 'bg-[#06A77D]/20 text-[#06A77D]' 
-                        : 'bg-gray-500/20 text-gray-400'
-                    }`}>
-                      {integration.status}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-bold mb-1">{integration.name}</h3>
-                  <p className="text-xs text-gray-500 mb-3">{integration.category}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                    {integration.description}
-                  </p>
-                  {integration.status === 'Available' && (
-                    <button className="text-[#FF6B35] hover:text-[#F77F00] text-sm font-semibold transition-colors">
-                      Connect →
-                    </button>
-                  )}
-                </div>
+                <IntegrationCard key={index} integration={integration} />
               ))}
             </div>
           </section>

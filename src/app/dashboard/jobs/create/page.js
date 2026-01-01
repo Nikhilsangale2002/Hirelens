@@ -302,9 +302,9 @@ export default function CreateJob() {
   };
 
   return (
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
         {/* Header */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3 md:space-x-4">
           <button
             onClick={() => router.back()}
             className="p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -312,15 +312,15 @@ export default function CreateJob() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-3xl font-bold">Create New Job</h1>
-            <p className="text-gray-400">Fill in the details to post a new job opening</p>
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">Create New Job</h1>
+            <p className="text-xs md:text-sm text-gray-400">Fill in the details to post a new job opening</p>
           </div>
         </div>
 
         {/* JD Upload Option */}
-        <div className="glass-panel rounded-2xl p-6">
-          <h3 className="font-semibold mb-4">Upload Job Description (Optional)</h3>
-          <div className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-[#FF6B35] transition-colors cursor-pointer">
+        <div className="glass-panel rounded-2xl p-4 md:p-6">
+          <h3 className="font-semibold mb-4 text-sm md:text-base">Upload Job Description (Optional)</h3>
+          <div className="border-2 border-dashed border-white/20 rounded-xl p-6 md:p-8 text-center hover:border-[#FF6B35] transition-colors cursor-pointer">
             <input
               type="file"
               id="jd-upload"
@@ -352,11 +352,11 @@ export default function CreateJob() {
           )}
 
           {/* Basic Information */}
-          <div className="glass-panel rounded-2xl p-6">
-            <h3 className="font-semibold mb-6">Basic Information</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+          <div className="glass-panel rounded-2xl p-4 md:p-6">
+            <h3 className="font-semibold mb-4 md:mb-6 text-sm md:text-base">Basic Information</h3>
+            <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
               <div>
-                <label className="block text-sm font-medium mb-2">Job Title *</label>
+                <label className="block text-xs md:text-sm font-medium mb-2">Job Title *</label>
                 <select
                   name="title"
                   value={formData.title}

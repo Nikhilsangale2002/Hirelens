@@ -83,18 +83,18 @@ export default function Dashboard() {
   };
 
   return (
-      <div className="space-y-6">
+      <div className="space-y-6 p-4 md:p-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold mb-2">
               Welcome back, <span className="gradient-text">{userData?.name || 'User'}</span>
             </h1>
-            <p className="text-gray-400">Here's what's happening with your recruitment today.</p>
+            <p className="text-gray-600 text-sm md:text-base">Here's what's happening with your recruitment today.</p>
           </div>
           <button
             onClick={() => router.push('/dashboard/jobs/create')}
-            className="flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all shadow-lg shadow-[#FF6B35]/20"
+            className="flex items-center justify-center space-x-2 px-4 md:px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all shadow-lg shadow-[#FF6B35]/20 w-full sm:w-auto"
           >
             <Plus className="w-5 h-5" />
             <span>Create Job</span>
@@ -128,10 +128,10 @@ export default function Dashboard() {
                   >
                     {stat.icon}
                   </div>
-                  <div className="text-xs text-gray-400">{stat.change}</div>
+                  <div className="text-xs text-gray-600">{stat.change}</div>
                 </div>
                 <div className="text-3xl font-bold mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-400">{stat.label}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
               </div>
             ))
           )}
@@ -170,11 +170,11 @@ export default function Dashboard() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg mb-1">{job.title}</h3>
-                      <p className="text-sm text-gray-400 mb-3">{job.department} • {job.created_at}</p>
+                      <p className="text-sm text-gray-600 mb-3">{job.department} • {job.created_at}</p>
                       
                       <div className="flex items-center space-x-6 text-sm">
                         <div className="flex items-center space-x-2">
-                          <Users className="w-4 h-4 text-gray-400" />
+                          <Users className="w-4 h-4 text-gray-600" />
                           <span>{job.candidates} candidates</span>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -196,7 +196,7 @@ export default function Dashboard() {
                 </div>
               ))
             ) : (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-gray-600">
                 No jobs yet. Create your first job to get started!
               </div>
             )}
@@ -219,7 +219,7 @@ export default function Dashboard() {
                   </div>
                   <span className="font-medium">Create New Job</span>
                 </div>
-                <ArrowRight className="w-5 h-5 text-gray-400" />
+                <ArrowRight className="w-5 h-5 text-gray-600" />
               </button>
 
               <button
@@ -232,7 +232,7 @@ export default function Dashboard() {
                   </div>
                   <span className="font-medium">Upload Resumes</span>
                 </div>
-                <ArrowRight className="w-5 h-5 text-gray-400" />
+                <ArrowRight className="w-5 h-5 text-gray-600" />
               </button>
 
               <button
@@ -245,7 +245,7 @@ export default function Dashboard() {
                   </div>
                   <span className="font-medium">Review Candidates</span>
                 </div>
-                <ArrowRight className="w-5 h-5 text-gray-400" />
+                <ArrowRight className="w-5 h-5 text-gray-600" />
               </button>
             </div>
           </div>
@@ -274,13 +274,13 @@ export default function Dashboard() {
                     ></div>
                     <div className="flex-1">
                       <div className="text-sm font-medium">{activity.action}</div>
-                      <div className="text-xs text-gray-400">{activity.detail}</div>
+                      <div className="text-xs text-gray-600">{activity.detail}</div>
                     </div>
                     <div className="text-xs text-gray-500">{activity.time}</div>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-gray-600">
                   No recent activity
                 </div>
               )}

@@ -1,24 +1,25 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, FileText, AlertCircle, Scale, Ban, CheckCircle, Brain } from 'lucide-react';
 
+export const metadata = {
+  title: 'Terms of Service | HireLens',
+  description: 'Read the Terms of Service for using the HireLens AI-powered recruitment platform.',
+};
+
 export default function Terms() {
-  const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => router.push('/')}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
-          >
+          <Link
+            href="/"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
-          </button>
+          </Link>
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg flex items-center justify-center">
               <Brain className="w-5 h-5 text-white" />
@@ -37,7 +38,7 @@ export default function Terms() {
               <Scale className="w-12 h-12 text-[#004E89]" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Terms of Service</h1>
-            <p className="text-xl text-gray-400">Last Updated: December 30, 2025</p>
+            <p className="text-xl text-gray-600">Last Updated: December 30, 2025</p>
           </div>
 
           {/* Content Sections */}
@@ -45,7 +46,7 @@ export default function Terms() {
             {/* Acceptance */}
             <section className="glass-panel p-8 rounded-2xl">
               <h2 className="text-3xl font-bold mb-4 gradient-text">Acceptance of Terms</h2>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed">
                 By accessing and using HireLens AI ("the Service"), you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these Terms of Service, please do not use the Service. We reserve the right to update and change these terms at any time without notice.
               </p>
             </section>
@@ -57,10 +58,10 @@ export default function Terms() {
                 <h2 className="text-3xl font-bold">Description of Service</h2>
               </div>
               
-              <p className="text-gray-300 leading-relaxed mb-4">
+              <p className="text-gray-600 leading-relaxed mb-4">
                 HireLens AI provides an AI-powered recruitment platform that enables users to:
               </p>
-              <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
+              <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
                 <li>Upload and analyze job descriptions</li>
                 <li>Process and score candidate resumes using artificial intelligence</li>
                 <li>Manage recruitment workflows and candidate pipelines</li>
@@ -76,7 +77,7 @@ export default function Terms() {
                 <h2 className="text-3xl font-bold">User Accounts</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-gray-600">
                 <p className="leading-relaxed">
                   <strong>Registration:</strong> You must register for an account to use certain features of the Service. You agree to provide accurate, current, and complete information during registration and to update such information as necessary.
                 </p>

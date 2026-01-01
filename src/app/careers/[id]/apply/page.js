@@ -159,12 +159,12 @@ export default function JobApplication() {
 
   if (isLoadingJob) {
     return (
-      <div className="min-h-screen bg-[#0A0E27] text-white">
-        <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <div className="min-h-screen bg-white text-black">
+        <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <button
               onClick={() => router.push(`/careers/${jobId}`)}
-              className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+              className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Job</span>
@@ -192,12 +192,12 @@ export default function JobApplication() {
 
   if (jobError || !job) {
     return (
-      <div className="min-h-screen bg-[#0A0E27] text-white">
-        <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <div className="min-h-screen bg-white text-black">
+        <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <button
               onClick={() => router.push('/careers')}
-              className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+              className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>Back to Careers</span>
@@ -232,16 +232,16 @@ export default function JobApplication() {
 
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-[#0A0E27] text-white flex items-center justify-center px-6">
+      <div className="min-h-screen bg-white text-black flex items-center justify-center px-6">
         <div className="max-w-2xl w-full glass-panel p-12 rounded-2xl text-center">
           <div className="w-20 h-20 mx-auto mb-6 bg-green-400/20 rounded-full flex items-center justify-center">
             <CheckCircle className="w-12 h-12 text-green-400" />
           </div>
           <h1 className="text-4xl font-bold mb-4">Application Submitted!</h1>
-          <p className="text-xl text-gray-400 mb-6">
-            Thank you for applying to <span className="text-white font-semibold">{job.title}</span>
+          <p className="text-xl text-gray-600 mb-6">
+            Thank you for applying to <span className="text-black font-semibold">{job.title}</span>
           </p>
-          <p className="text-gray-400 mb-8">
+          <p className="text-gray-600 mb-8">
             We've received your application and our AI is analyzing your resume. 
             You'll hear from us soon if your profile matches our requirements.
           </p>
@@ -257,13 +257,13 @@ export default function JobApplication() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <button
             onClick={() => router.push(`/careers/${jobId}`)}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Job</span>

@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #0A0E27;
-  --foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #000000;
 }
 
 html {
@@ -53,10 +53,10 @@ a {
 
 /* Glass panel effect */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.03);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Hover lift effect */
@@ -145,8 +145,8 @@ a {
 /* Grid background */
 .grid-bg {
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -156,7 +156,7 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0E27;
+  background: #f5f5f5;
 }
 
 ::-webkit-scrollbar-thumb {

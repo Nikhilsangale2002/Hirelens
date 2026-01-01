@@ -72,16 +72,16 @@ export default function JobsPage() {
   });
 
   return (
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Jobs</h1>
-            <p className="text-gray-400">Manage all your job postings and candidates</p>
+            <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Jobs</h1>
+            <p className="text-sm md:text-base text-gray-400">Manage all your job postings and candidates</p>
           </div>
           <button
             onClick={() => router.push('/dashboard/jobs/create')}
-            className="flex items-center space-x-2 px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all shadow-lg shadow-[#FF6B35]/20"
+            className="flex items-center justify-center space-x-2 px-4 md:px-6 py-3 bg-[#FF6B35] hover:bg-[#F77F00] rounded-lg font-semibold transition-all shadow-lg shadow-[#FF6B35]/20 w-full sm:w-auto"
           >
             <Plus className="w-5 h-5" />
             <span>Create Job</span>
@@ -96,7 +96,7 @@ export default function JobsPage() {
         )}
 
         {/* Filters & Search */}
-        <div className="glass-panel rounded-2xl p-6">
+        <div className="glass-panel rounded-2xl p-4 md:p-6">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
             <div className="flex-1 relative">
@@ -146,14 +146,14 @@ export default function JobsPage() {
             <div className="space-y-4">{filteredJobs.map((job) => (
             <div
               key={job.id}
-              className="glass-panel rounded-2xl p-6 hover-lift cursor-pointer"
+              className="glass-panel rounded-2xl p-4 md:p-6 hover-lift cursor-pointer"
               onClick={() => router.push(`/dashboard/jobs/${job.id}`)}
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-xl font-bold">{job.title}</h3>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:space-x-3 mb-2">
+                    <h3 className="text-lg md:text-xl font-bold">{job.title}</h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium w-fit ${
                       job.status === 'active' 
                         ? 'bg-[#06A77D]/20 text-[#06A77D]' 
                         : 'bg-gray-500/20 text-gray-400'
@@ -162,14 +162,14 @@ export default function JobsPage() {
                     </span>
                   </div>
                   
-                  <div className="flex items-center space-x-4 text-sm text-gray-400 mb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-400 mb-3">
                     <span>{job.department}</span>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span>{job.location}</span>
-                    <span>•</span>
+                    <span className="hidden sm:inline">•</span>
                     <span>{job.job_type || job.type}</span>
-                    <span>•</span>
-                    <span>Created {formatDate(job.created_at || job.createdAt)}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="text-xs">Created {formatDate(job.created_at || job.createdAt)}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2">

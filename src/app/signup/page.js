@@ -104,12 +104,11 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-white text-black flex items-center justify-center px-6 py-12">
       {/* Back to Home Button - Top Left */}
       <button 
         onClick={() => router.push('/')}
-        className="absolute top-6 left-6 inline-flex items-center space-x-2 text-gray-400 hover:text-white transition-colors z-20"
-      >
+        className="absolute top-6 left-6 inline-flex items-center space-x-2 text-gray-600 hover:text-black transition-colors z-20">
         <ArrowRight className="w-5 h-5 rotate-180" />
         <span>Back to Home</span>
       </button>
@@ -126,7 +125,7 @@ export default function SignUp() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Create Your <span className="gradient-text">Account</span>
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-600">
             Join HireLens and revolutionize your hiring process
           </p>
         </div>
@@ -147,7 +146,7 @@ export default function SignUp() {
                 Full Name
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                 <input
                   type="text"
                   id="name"
@@ -155,7 +154,7 @@ export default function SignUp() {
                   value={formData.name}
                   onChange={handleChange}
                   className={`w-full pl-12 pr-4 py-3 bg-white/5 border ${
-                    errors.name ? 'border-red-500' : 'border-white/10'
+                    errors.name ? 'border-red-500' : 'border-gray-200'
                   } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                   placeholder="John Doe"
                 />
@@ -171,7 +170,7 @@ export default function SignUp() {
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                 <input
                   type="email"
                   id="email"
@@ -179,7 +178,7 @@ export default function SignUp() {
                   value={formData.email}
                   onChange={handleChange}
                   className={`w-full pl-12 pr-4 py-3 bg-white/5 border ${
-                    errors.email ? 'border-red-500' : 'border-white/10'
+                    errors.email ? 'border-red-500' : 'border-gray-200'
                   } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                   placeholder="john@example.com"
                 />
@@ -195,7 +194,7 @@ export default function SignUp() {
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -203,14 +202,14 @@ export default function SignUp() {
                   value={formData.password}
                   onChange={handleChange}
                   className={`w-full pl-12 pr-12 py-3 bg-white/5 border ${
-                    errors.password ? 'border-red-500' : 'border-white/10'
+                    errors.password ? 'border-red-500' : 'border-gray-200'
                   } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -226,7 +225,7 @@ export default function SignUp() {
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
@@ -234,14 +233,14 @@ export default function SignUp() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className={`w-full pl-12 pr-12 py-3 bg-white/5 border ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-white/10'
+                    errors.confirmPassword ? 'border-red-500' : 'border-gray-200'
                   } rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -276,7 +275,7 @@ export default function SignUp() {
 
           {/* Sign In Link */}
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
+            <p className="text-gray-600">
               Already have an account?{' '}
               <button
                 onClick={() => router.push('/signin')}
@@ -297,7 +296,7 @@ export default function SignUp() {
           ].map((item, index) => (
             <div key={index} className="flex flex-col items-center space-y-2">
               <div className="text-[#06A77D]">{item.icon}</div>
-              <span className="text-xs text-gray-400">{item.text}</span>
+              <span className="text-xs text-gray-600">{item.text}</span>
             </div>
           ))}
         </div>

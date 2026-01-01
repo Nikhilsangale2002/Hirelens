@@ -1,11 +1,13 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ArrowLeft, Shield, Lock, Server, Eye, Bell, FileCheck, Users, Key, Brain } from 'lucide-react';
 
+export const metadata = {
+  title: 'Security | HireLens - Data Protection & Compliance',
+  description: 'Learn about HireLens comprehensive security measures, data protection standards, and compliance certifications.',
+};
+
 export default function Security() {
-  const router = useRouter();
 
   const securityFeatures = [
     {
@@ -42,17 +44,16 @@ export default function Security() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0E27] text-white">
+    <div className="min-h-screen bg-white text-black">
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 bg-[#0F1433] border-b border-white/10 z-50">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-50 border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => router.push('/')}
-            className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
-          >
+          <Link
+            href="/"
+            className="flex items-center space-x-2 text-gray-600 hover:text-black transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Home</span>
-          </button>
+          </Link>
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-[#FF6B35] to-[#F77F00] rounded-lg flex items-center justify-center">
               <Brain className="w-5 h-5 text-white" />
@@ -71,7 +72,7 @@ export default function Security() {
               <Shield className="w-12 h-12 text-[#06A77D]" />
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Security</h1>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Your data security is our top priority. Learn about our comprehensive security measures and compliance standards.
             </p>
           </div>
@@ -95,7 +96,7 @@ export default function Security() {
                     {feature.icon}
                   </div>
                   <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -109,7 +110,7 @@ export default function Security() {
                 <h2 className="text-3xl font-bold">Data Protection Measures</h2>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-6 text-gray-300">
+              <div className="grid md:grid-cols-2 gap-6 text-gray-600">
                 <div>
                   <h3 className="text-xl font-semibold mb-3 text-white">Encryption at Rest</h3>
                   <p className="leading-relaxed">
@@ -149,7 +150,7 @@ export default function Security() {
                 <h2 className="text-3xl font-bold">Access Security</h2>
               </div>
               
-              <div className="space-y-6 text-gray-300">
+              <div className="space-y-6 text-gray-600">
                 <div>
                   <h3 className="text-xl font-semibold mb-3 text-white flex items-center space-x-2">
                     <Key className="w-5 h-5 text-[#F77F00]" />
@@ -192,7 +193,7 @@ export default function Security() {
                 <h2 className="text-3xl font-bold">Monitoring & Incident Response</h2>
               </div>
               
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-gray-600">
                 <p className="leading-relaxed">
                   Our security operations center (SOC) monitors our infrastructure 24/7 for any suspicious activity or security threats.
                 </p>
@@ -230,7 +231,7 @@ export default function Security() {
                 <h2 className="text-3xl font-bold">Compliance & Certifications</h2>
               </div>
               
-              <p className="text-gray-300 leading-relaxed mb-6">
+              <p className="text-gray-600 leading-relaxed mb-6">
                 HireLens AI complies with major international security and privacy regulations:
               </p>
               
@@ -245,8 +246,8 @@ export default function Security() {
                         <Shield className="w-6 h-6 text-[#FF6B35]" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white">{standard.name}</h4>
-                        <p className="text-sm text-gray-400">{standard.description}</p>
+                        <h4 className="font-semibold text-black">{standard.name}</h4>
+                        <p className="text-sm text-gray-600">{standard.description}</p>
                       </div>
                     </div>
                   </div>
@@ -259,16 +260,16 @@ export default function Security() {
           <section className="mb-16">
             <div className="glass-panel p-8 rounded-2xl border border-[#FF6B35]/30">
               <h2 className="text-3xl font-bold mb-4">Responsible Disclosure</h2>
-              <p className="text-gray-300 leading-relaxed mb-4">
+              <p className="text-gray-600 leading-relaxed mb-4">
                 We value the security community's efforts in keeping our platform secure. If you discover a security vulnerability, please report it to us responsibly.
               </p>
               
               <div className="bg-white/5 p-6 rounded-xl">
-                <h3 className="text-xl font-semibold mb-3 text-white">How to Report</h3>
-                <p className="text-gray-300 mb-4">
+                <h3 className="text-xl font-semibold mb-3 text-black">How to Report</h3>
+                <p className="text-gray-600 mb-4">
                   Send details of the vulnerability to <span className="text-[#FF6B35] font-mono">security@hirelens.ai</span>
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-300 ml-4">
+                <ul className="list-disc list-inside space-y-2 text-gray-600 ml-4">
                   <li>Include detailed steps to reproduce the vulnerability</li>
                   <li>Allow us reasonable time to address the issue before public disclosure</li>
                   <li>Do not access or modify data that doesn't belong to you</li>
@@ -281,10 +282,10 @@ export default function Security() {
           {/* Contact */}
           <section className="glass-panel p-8 rounded-2xl">
             <h2 className="text-3xl font-bold mb-4">Security Questions?</h2>
-            <p className="text-gray-300 leading-relaxed mb-4">
+            <p className="text-gray-600 leading-relaxed mb-4">
               For security-related inquiries or to report a security concern, please contact our security team:
             </p>
-            <div className="text-gray-300 space-y-2">
+            <div className="text-gray-600 space-y-2">
               <p><strong>Email:</strong> security@hirelens.ai</p>
               <p><strong>Emergency:</strong> Available 24/7 for critical security incidents</p>
             </div>
