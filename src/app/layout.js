@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ChatBot from "@/components/ChatBot";
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         {children}
+        <ChatBot />
       </body>
     </html>
   );

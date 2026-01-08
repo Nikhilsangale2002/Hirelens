@@ -148,6 +148,8 @@ export default function Home() {
               <button onClick={() => router.push('/features')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">Features</button>
               <button onClick={() => router.push('/pricing')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">Pricing</button>
               <button onClick={() => router.push('/about')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">About</button>
+              <button onClick={() => router.push('/contact')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">Contact</button>
+              <button onClick={() => router.push('/careers')} className="text-gray-600 hover:text-[#FF6B35] transition-colors font-medium">Careers</button>
               <button onClick={() => router.push('/signin')} className="px-6 py-2 text-gray-600 hover:text-black transition-colors font-medium">
                 Sign In
               </button>
@@ -171,6 +173,8 @@ export default function Home() {
               <button onClick={() => router.push('/features')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">Features</button>
               <button onClick={() => router.push('/pricing')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">Pricing</button>
               <button onClick={() => router.push('/about')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">About</button>
+              <button onClick={() => router.push('/contact')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">Contact</button>
+              <button onClick={() => router.push('/careers')} className="block text-left text-gray-600 hover:text-[#FF6B35] font-medium">Careers</button>
               <button onClick={() => router.push('/signin')} className="block w-full px-6 py-2 text-gray-600 border border-gray-600 rounded-lg font-medium">
                 Sign In
               </button>

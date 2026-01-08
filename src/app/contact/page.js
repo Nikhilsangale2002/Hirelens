@@ -203,7 +203,7 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-black"
                     placeholder="John Doe"
                     required
                   />
@@ -219,7 +219,7 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-black"
                     placeholder="john@example.com"
                     required
                   />
@@ -235,7 +235,7 @@ export default function Contact() {
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-black"
                     placeholder="Your Company"
                   />
                 </div>
@@ -250,7 +250,7 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors"
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors text-black"
                     placeholder="How can we help?"
                     required
                   />
@@ -266,7 +266,7 @@ export default function Contact() {
                     value={formData.message}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF6B35] transition-colors resize-none text-black"
                     placeholder="Tell us more about your inquiry..."
                     required
                   />
@@ -319,13 +319,26 @@ export default function Contact() {
                   Check out our FAQ and documentation for instant answers to common questions.
                 </p>
                 <div className="space-y-3">
-                  <button className="w-full px-4 py-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors text-left">
+                  <button 
+                    onClick={() => router.push('/docs')}
+                    className="w-full px-4 py-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors text-left"
+                  >
                     📚 View Documentation
                   </button>
-                  <button className="w-full px-4 py-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors text-left">
+                  <button 
+                    onClick={() => router.push('/faq')}
+                    className="w-full px-4 py-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors text-left"
+                  >
                     ❓ Browse FAQ
                   </button>
-                  <button className="w-full px-4 py-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors text-left">
+                  <button 
+                    onClick={() => {
+                      // Chat widget will be available globally
+                      const chatButton = document.querySelector('[aria-label="Open chat"]');
+                      if (chatButton) chatButton.click();
+                    }}
+                    className="w-full px-4 py-3 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white rounded-lg hover:opacity-90 transition-all text-left font-semibold"
+                  >
                     💬 Live Chat Support
                   </button>
                 </div>
