@@ -15,7 +15,7 @@ export default function AuthCallback() {
         if (error) throw error
         
         if (session) {
-          const response = await fetch('http://localhost:5000/api/auth/oauth/callback', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/oauth/callback`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

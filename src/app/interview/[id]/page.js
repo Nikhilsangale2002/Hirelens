@@ -346,7 +346,7 @@ export default function CandidateInterviewPage() {
 
   const fetchInterview = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/questions`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/questions`);
 
       if (!response.ok) throw new Error('Failed to load interview');
 
@@ -400,7 +400,7 @@ export default function CandidateInterviewPage() {
   // Log security event to backend
   const logSecurityEvent = async (eventType, metadata = {}) => {
     try {
-      await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/log-activity`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/log-activity`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -424,7 +424,7 @@ export default function CandidateInterviewPage() {
 
   const submitAnswer = async (questionId, answer) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/submit-answer`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/submit-answer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -498,7 +498,7 @@ export default function CandidateInterviewPage() {
         devToolsDetected: devToolsOpen
       });
 
-      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/complete`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/complete`, {
         method: 'POST'
       });
 

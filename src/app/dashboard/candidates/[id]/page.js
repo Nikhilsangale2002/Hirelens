@@ -79,7 +79,7 @@ export default function CandidateDetailPage() {
     try {
       setIsLoadingAiAnalysis(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/analysis`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/analysis`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -102,7 +102,7 @@ export default function CandidateDetailPage() {
     try {
       setGeneratingQuestions(true);
       const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-      const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/generate-questions`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/generate-questions`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -173,7 +173,7 @@ export default function CandidateDetailPage() {
             return;
           }
 
-          const response = await fetch(`http://localhost:5000/api/ai/interviews/${interviewId}/generate-questions`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/ai/interviews/${interviewId}/generate-questions`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
